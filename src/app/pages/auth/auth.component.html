@@ -1,0 +1,9 @@
+<div class="auth-bg">
+  <div class="auth-box" [ngClass]="{'auth-register': pageType === 'register'}">
+    <div class="auth-banner" (click)="onAuthToggle()">
+      <img class="auth-banner-img" src="https://picsum.photos/800/600" alt="banner">
+    </div>
+    <div class="auth-func" nz-row><router-outlet></router-outlet></div>
+  </div>
+</div>
+

@@ -1,0 +1,102 @@
+@function getShadow() {
+  $size: 0.5rem;
+  $color: var(--shadow-color);
+  $contrast-color: var(--shadow-contrast-color);
+  @return $size $size $size * 2 $color,
+         (-$size) (-$size) $size * 2 $contrast-color;
+}
+@function getShadowInset() {
+  $size: 0.5rem;
+  $color: var(--shadow-color);
+  $contrast-color: var(--shadow-contrast-color);
+  @return $size 0 $size * 2 $color inset;
+}
+@mixin halfBox {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+.auth-bg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  &::after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    background-image: url("https://picsum.photos/800/600");
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    filter: blur(5px);
+  }
+}
+.auth-box {
+  width: 800px;
+  height: 600px;
+  margin: 0 auto;
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+  box-shadow: getShadow();
+}
+.auth-banner {
+  @include halfBox;
+  left: 0;
+  transition: left 0.3s ease-in-out;
+  z-index: 2;
+  &::after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-shadow: getShadow();
+  }
+}
+.auth-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.auth-func {
+  @include halfBox;
+  left: 50%;
+  padding: 1rem;
+  transition: left 0.3s ease-in-out;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  &::after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 0.5;
+    background-color: var(--shadow-contrast-color);
+  }
+}
+.auth-register {
+  .auth-banner {
+    left: 50%;
+    &::after {
+      box-shadow: getShadowInset();
+    }
+  }
+  .auth-func {
+    left: 0;
+  }
+}
