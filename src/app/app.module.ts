@@ -11,6 +11,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { zh_CN } from 'ng-zorro-antd/i18n';
 import { ThemeService } from './services/theme.service';
+import { MenuService } from './services/data/menu.service';
+import { AuthService } from './services/data/auth.service';
 
 registerLocaleData(zh);
 
@@ -29,6 +31,8 @@ registerLocaleData(zh);
   providers: [
     { provide: NZ_I18N, useValue: zh_CN },
     ThemeService,
+    MenuService,
+    AuthService,
   ]
 })
 export class AppModule { }

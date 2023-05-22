@@ -1,1 +1,8 @@
 @import "./var.scss";
+
+html {
+  --shadow-color: $shadow-color;
+  --shadow-contrast-color: $shadow-contrast-color;
+  --primary-color: $primary-color;
+  --attach-color: $attach-color;
+}

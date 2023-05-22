@@ -1,0 +1,33 @@
+@import '../../../styles/tools.scss';
+@import '../../../styles/var.scss';
+
+.base-box {
+  height: 100%;
+}
+.base-header {
+  @include borderAfter('bottom');
+}
+.base-sider {
+  @include borderAfter('right');
+}
+.base-menu-controller {
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.base-sider .ant-menu-item-selected {
+  background-color: rgba($primary-color, 0.6);
+}
+
+.base-menu-title {
+  padding-left: 1rem;
+  margin: 0;
+  opacity: 0.5;
+  font-size: 0.9em;
+}
+.base-menu-item {
+  height: 3.4rem;
+}
+.base-menu-text {
+  user-select: none;
+}
