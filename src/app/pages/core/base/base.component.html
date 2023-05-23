@@ -1,2 +1,55 @@
-<p>base works!</p>
-<router-outlet></router-outlet>
+<nz-layout class="base-box">
+  <nz-header class="base-header" nz-row nzAlign="middle">
+    <div class="logo">
+      <img class="base-logo" src="/assets/images/logo.webp" alt="logo">
+    </div>
+    <div
+      nz-button
+      nz-col
+      class="base-menu-controller"
+      [nzOffset]="1"
+      (click)="siderToggleSwitch()">
+      <lib-icon [icon]="siderToggle ? 'icon-dianxiangengduo' : 'icon-xianxinggengduo'"></lib-icon>
+    </div>
+    <button
+      nz-button
+      nz-col
+      nzShape="round"
+      nzType="primary"
+      [nzGhost]="true"
+      [nzPush]="19">
+      {{authService.userName}}
+    </button>
+  </nz-header>
+  <nz-layout>
+    <nz-sider
+      [nzCollapsible]="true"
+      [nzCollapsed]="siderToggle"
+      [nzTrigger]="null"
+      [nzWidth]="200"
+      class="base-sider">
+      <ng-container *ngFor="let list of menuData.menuData">
+        <p class="base-menu-title" *ngIf="list.name !== ''">{{list.name}}</p>
+        <ul
+          nz-menu
+          nzTheme="dark"
+          nzMode="inline"
+          [nzInlineCollapsed]="siderToggle"
+          class="base-menu">
+          <li
+            *ngFor="let item of list.list"
+            class="base-menu-item"
+            nz-menu-item
+            [nzSelected]="menuSelected == item.href"
+            (click)="goToLink(item.href)">
+            <span nz-icon><lib-icon [icon]="item.icon"></lib-icon></span>
+            <span class="base-menu-text">&nbsp;{{item.title}}</span>
+          </li>
+        </ul>
+      </ng-container>
+    </nz-sider>
+    <nz-layout class="inner-layout">
+      <router-outlet></router-outlet>
+    </nz-layout>
+  </nz-layout>
+</nz-layout>

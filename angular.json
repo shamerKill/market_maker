@@ -43,10 +43,6 @@
               {
                 "input": "./src/app/styles/themes/default.less",
                 "inject": false
-              },
-              {
-                "input": "./src/app/styles/themes/dark.less",
-                "inject": false
               }
             ],
             "scripts": []

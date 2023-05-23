@@ -1,0 +1,48 @@
+@import './var.scss';
+
+@mixin borderA {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    background-color: $border-color;
+  }
+}
+@mixin borderAfter($type) {
+  @if $type == 'top' {
+    @include borderA;
+    &::after {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+    }
+  }
+  @else if $type == 'bottom' {
+    @include borderA;
+    &::after {
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+    }
+  }
+  @else if $type == 'left' {
+    @include borderA;
+    &::after {
+      top: 0;
+      left: 0;
+      width: 1px;
+      height: 100%;
+    }
+  }
+  @else if $type == 'right' {
+    @include borderA;
+    &::after {
+      top: 0;
+      right: 0;
+      width: 1px;
+      height: 100%;
+    }
+  }
+}
