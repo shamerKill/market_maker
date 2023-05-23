@@ -1,29 +1,32 @@
-<h2 class="login-title" nz-typography>登录</h2>
-<form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+<h2 class="login-title" nz-typography>登录PLUG</h2>
+<form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
   <nz-form-item>
-    <nz-form-control nzErrorTip="请输入正确的账户!">
-      <nz-input-group nzPrefixIcon="user">
-        <input nzSize="large" type="text" nz-input formControlName="userName" placeholder="账户" />
+    <nz-form-label><span style="color:white">用户名</span></nz-form-label>
+    <nz-form-control nzErrorTip="请输入正确的用户名!">
+      <nz-input-group>
+        <input nzSize="large" type="text" nz-input formControlName="userName" placeholder="请输入用户名" style="background: #161a2b;border: none;color: #fff;border-radius: 10px;line-height: 40px;" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
+    <nz-form-label><span style="color:white">密码</span></nz-form-label>
     <nz-form-control nzErrorTip="请输入正确的密码!">
-      <nz-input-group nzPrefixIcon="lock">
-        <input nzSize="large" type="password" nz-input formControlName="password" placeholder="密码" />
+      <nz-input-group>
+        <input nzSize="large" type="password" nz-input formControlName="password" placeholder="请输入密码"  style="background: #161a2b;border: none;color: #fff;border-radius: 10px;line-height: 40px;"/>
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
   <div nz-row class="login-form-margin">
-    <div nz-col [nzSpan]="12">
-      <label nz-checkbox formControlName="remember">
-        <span>记住我</span>
+    <div nz-col [nzSpan]="16">
+      <label nz-checkbox formControlName="agree">
+        <span style="color: #c9cbd3;">同意闪电 <span style="color: #65dc8f;">《用户协议》</span> </span>
       </label>
     </div>
-    <div nz-col [nzSpan]="12">
-      <a class="login-form-forgot">忘记密码</a>
+    <div nz-col [nzSpan]="8">
+      <a class="login-form-forgot" style="color: #666b7e;">忘记密码?</a>
     </div>
   </div>
   <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">登录</button>
-  <a [routerLink]="['/auth/register']">前往注册</a>
+  <button nz-button class="login-form-button login-form-margin other" [nzType]="'default'" [routerLink]="['/auth/register']">没有账号？去注册</button>
+  <a ></a>
 </form>

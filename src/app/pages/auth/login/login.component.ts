@@ -15,7 +15,7 @@ export class LoginComponent {
     this.validateForm = this.fb.group({
       userName: [null, [Validators.required]],
       password: [null, [Validators.required]],
-      remember: [true]
+      agree: [true]
     });
   }
 

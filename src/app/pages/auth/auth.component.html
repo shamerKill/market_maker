@@ -1,7 +1,9 @@
 <div class="auth-bg">
   <div class="auth-box" [ngClass]="{'auth-register': pageType === 'register'}">
-    <div class="auth-banner" (click)="onAuthToggle()">
-      <img class="auth-banner-img" src="https://picsum.photos/800/600" alt="banner">
+    <div class="auth-btns">
+      <div class="auth-btns-btn" [ngClass]="{'active': pageType === 'register'}" (click)="onAuthToggle()">注册</div>
+      <div class="auth-btns-btn" [ngClass]="{'active': pageType === 'login'}" (click)="onAuthToggle()">登录</div>
+      <img src="../../../assets/loginImg/yuyan.png" alt="">
     </div>
     <div class="auth-func" nz-row><router-outlet></router-outlet></div>
   </div>

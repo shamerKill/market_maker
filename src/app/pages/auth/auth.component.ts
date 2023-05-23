@@ -31,6 +31,7 @@ export class AuthComponent implements OnInit {
 
 
   onAuthToggle() {
+    console.log(this.pageType)
     if (this.pageType === 'login') {
       this.router.navigate(['auth/register']);
     } else {
