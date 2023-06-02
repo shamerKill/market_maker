@@ -1,8 +1,18 @@
 @import "./var.scss";
 
 html {
-  --shadow-color: $shadow-color;
-  --shadow-contrast-color: $shadow-contrast-color;
-  --primary-color: $primary-color;
-  --attach-color: $attach-color;
+  --shadow-color: #{$shadow-color};
+  --shadow-contrast-color: #{$shadow-contrast-color};
+  --primary-color: #{$primary-color};
+  --attach-color: #{$attach-color};
+  --main-bg-color: #{$main-bg-color};
+  --attach-bg-color: #{$attach-bg-color};
+  --text-color: #{$text-color};
+  --down-color: #{$down-color};
+  --up-color: #{$up-color};
+  --contrast-color: #{$contrast-color};
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
 }

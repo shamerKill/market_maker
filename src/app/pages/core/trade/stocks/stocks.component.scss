@@ -1,0 +1,191 @@
+@import '../../../../styles/var.scss';
+
+$box-bg: linear-gradient(to bottom, rgba($attach-bg-color, 1),rgba($attach-bg-color, 0.2));
+
+:host {
+  height: 100%;
+}
+
+.container {
+  height: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.operation-area {
+  padding-right: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-info {
+  height: 2rem;
+  margin-bottom: 1rem;
+}
+.page-main {
+  height: 50%;
+  min-height: 35rem;
+}
+.page-action {
+  min-width: 15rem;
+  max-width: 30rem;
+  margin-right: 1rem;
+  border-radius: 1rem;
+  background-image: $box-bg;
+  display: flex;
+  flex-direction: column;
+  .action-tabs {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+  }
+  .action-tab {
+    width: 50%;
+    background-color: var(--main-bg-color);
+    color: var(--text-color);
+    border-radius: 0.5em;
+    transition: background-color 0.3s, color 0.3s;
+    &:nth-child(1) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    &:nth-child(2) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    &.action-tab-active {
+      color: var(--main-bg-color);
+      background-color: var(--contrast-color);
+    }
+  }
+  .action-btn {
+    border-radius: 0.5em;
+  }
+  .action-btn-buy {
+    background-color: var(--up-color);
+    border-color: var(--up-color);
+  }
+  .action-btn-sell {
+    background-color: var(--down-color);
+    border-color: var(--down-color);
+  }
+  .action-list {
+    flex: 1;
+  }
+}
+
+.page-table {
+  padding-top: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-tabs {
+  display: flex;
+  align-items: center;
+  padding: 1rem 0;
+}
+.table-tab {
+  opacity: 0.7;
+  font-size: 1.2rem;
+  margin-right: 1rem;
+  background: none;
+  border: none;
+  height: 2rem;
+  vertical-align: bottom;
+  cursor: pointer;
+  transition: font-size 0.1s, color 0.1s;
+  &::after {
+    content: attr(data-total);
+    opacity: 0.7;
+    font-size: 0.9em;
+    font-weight: 400;
+  }
+  &.table-tab-active {
+    font-size: 1.3rem;
+    opacity: 1;
+    font-weight: 600;
+  }
+}
+.table-space {
+  flex: 1;
+}
+.table-logs {
+  display: block;
+  i {
+    padding-right: 0.3em;
+  }
+}
+.table-list {
+  flex: 1;
+}
+.table-head {
+  background-color: var(--attach-bg-color);
+}
+
+
+.handicap-top {
+  padding: 0.5rem 0;
+}
+.handicap-head {
+  background-color: var(--main-bg-color);
+  padding: 0.5rem 1rem;
+  &>p:nth-child(1) {
+    text-align: left;
+  }
+  &>p {
+    text-align: right;
+  }
+}
+
+
+.handicap-area {
+  border-radius: 1rem;
+  max-width: 18rem;
+  background-image: $box-bg;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+.handicap-list {
+  flex: 1;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  overflow: hidden;
+}
+.handle-form {
+  height: 100%;
+  box-sizing: border-box;
+  padding: 1rem;
+}
+.handicap-sell,.handicap-buy  {
+  height: 50%;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.handicap-buy {
+  .handicap-price {
+    color: var(--up-color);
+  }
+}
+.handicap-sell {
+  flex-direction: column-reverse;
+  .handicap-price {
+    color: var(--down-color);
+  }
+}
+.handicap-divider {
+  height: 1px;
+  background-color: var(--main-bg-color);
+  margin: 0.5rem 0;
+}
+.handicap-item {
+  flex: 1;
+  min-height: 2em;
+  max-height: 3em;
+  align-items: center;
+}

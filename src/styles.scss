@@ -1,1 +1,54 @@
-@import url("./app/styles/init.scss");
+@import "./app/styles/init.scss";
+
+
+// global style
+
+.margin-none {
+  margin: 0;
+}
+.padding-none {
+  padding: 0;
+}
+
+@for $i from 1 through 10 {
+  .opacity-#{$i} {
+    opacity: #{0.1 * $i};
+  }
+}
+@for $i from 0 through 10 {
+  .padding-bottom-#{$i} {
+    padding-bottom: #{0.1 * $i}em;
+  }
+  .padding-top-#{$i} {
+    padding-top: #{0.1 * $i}em;
+  }
+  .padding-left-#{$i} {
+    padding-left: #{0.1 * $i}em;
+  }
+  .padding-right-#{$i} {
+    padding-right: #{0.1 * $i}em;
+  }
+  .margin-bottom-#{$i} {
+    margin-bottom: #{0.1 * $i}em;
+  }
+  .margin-top-#{$i} {
+    margin-top: #{0.1 * $i}em;
+  }
+  .margin-left-#{$i} {
+    margin-left: #{0.1 * $i}em;
+  }
+  .margin-right-#{$i} {
+    margin-right: #{0.1 * $i}em;
+  }
+}
+
+.color-primary {
+  color: $primary-color;
+}
+
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}

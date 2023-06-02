@@ -1,1 +1,144 @@
-<p>stocks works!</p>
+<div class="container" nz-row>
+  <div class="operation-area" nz-col [nzFlex]="1">
+    <div class="page-info" nz-row nzAlign="middle">
+      <p class="margin-none" nz-col>
+        当前盘口：
+        <span class="page-info-value">币安 BTC/USDT</span>
+      </p>
+      <button nz-button nzType="text" nz-col [nzSpan]="4" [nzOffset]="1" (click)="onSwitchCollected()">
+        <span nz-icon nzType="star" [ngClass]="isCollected ? 'color-primary' : 'opacity-5'"
+          [nzTheme]="isCollected ? 'fill' : 'outline'"></span>
+        收藏当前盘口
+      </button>
+      <button nz-col [nzOffset]="1" nz-button nzShape="round" nzSize="small" nzType="primary"
+        (click)="onSelectPlatform()">
+        选择盘口
+      </button>
+    </div>
+    <div class="page-main" nz-row>
+      <div class="page-action" nz-col [nzSpan]="6">
+        <!-- tools -->
+        <div class="action-tabs">
+          <button nz-button nzType="text" class="action-tab" [ngClass]="{'action-tab-active':  actionType === 0}"
+            (click)="actionType = 0">
+            手动下单
+          </button>
+          <button nz-button nzType="text" class="action-tab" [ngClass]="{'action-tab-active':  actionType === 1}"
+            (click)="actionType = 1">
+            量化交易
+          </button>
+        </div>
+        <div class="action-list">
+          <!-- 手动下单 -->
+          <div class="handle-form" *ngIf="actionType === 0">
+            <div>
+              <p nz-typography nzType="secondary">价格</p>
+              <nz-input-group class="text-center" [nzAddOnBefore]="cutPrice" [nzAddOnAfter]="addPrice">
+                <input nz-input type="number" id="price" class="text-center" [(ngModel)]="manualOrder.price">
+              </nz-input-group>
+              <ng-template #cutPrice>
+                <button nzSize="small" nz-button nzType="text" (click)="onManualOrderPriceChange('cut')">-</button>
+              </ng-template>
+              <ng-template #addPrice>
+                <button nzSize="small" nz-button nzType="text" (click)="onManualOrderPriceChange('add')">+</button>
+              </ng-template>
+            </div>
+            <div>
+              <p nz-typography nzType="secondary" class="padding-top-10">数量</p>
+              <nz-input-group class="text-center" [nzAddOnBefore]="cutNumber" [nzAddOnAfter]="addNumber">
+                <input nz-input type="number" id="number" [(ngModel)]="manualOrder.number">
+              </nz-input-group>
+              <ng-template #cutNumber>
+                <button nzSize="small" nz-button nzType="text" (click)="onManualOrderNumberChange('cut')">-</button>
+              </ng-template>
+              <ng-template #addNumber>
+                <button nzSize="small" nz-button nzType="text" (click)="onManualOrderNumberChange('add')">+</button>
+              </ng-template>
+            </div>
+            <p nz-typography nzType="secondary" class="padding-top-10">
+              主钱包资产
+            </p>
+            <div class="padding-bottom-10" nz-row *ngFor="let item of mainWallet">
+              <span nz-col [nzSpan]="12">{{item.symbol}}</span>
+              <span nz-col [nzSpan]="6">可用 {{item.available}}</span>
+              <span nz-col [nzSpan]="6">冻结 {{item.frozen}}</span>
+            </div>
+            <div class="padding-top-10" nz-row>
+              <button class="action-btn action-btn-buy" nzType="primary" nz-col nz-button [nzSpan]="11">
+                买入
+              </button>
+              <button class="action-btn action-btn-sell" nzType="primary" nz-col nz-button [nzSpan]="11" [nzOffset]="2">
+                卖出
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="page-chart" nz-col [nzFlex]="1">
+        <lib-kline-chart></lib-kline-chart>
+      </div>
+    </div>
+    <div class="page-table">
+      <div class="table-tabs">
+        <button class="table-tab table-tab-active" [ngClass]="{'table-tab-active':  tabType === 0}"
+          [attr.data-total]="'(' + orderList.total + ')'" (click)="tabType = 0">
+          订单管理
+        </button>
+        <button [ngClass]="{'table-tab-active':  tabType === 1}" class="table-tab" (click)="tabType = 1">
+          机器人管理
+        </button>
+        <div class="table-space"></div>
+        <a class="table-logs"><i class="iconfont icon-jilu"></i>交易记录</a>
+      </div>
+      <div class="table-list">
+        <ng-container *ngIf="tabType === 0">
+          <div class="table-head padding-top-5 padding-bottom-5" nz-row>
+            <p nz-col [nzSpan]="4" class="margin-bottom-0 padding-left-10 opacity-8">价格</p>
+            <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">数量</p>
+            <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">已成交</p>
+            <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">方向</p>
+            <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">时间</p>
+            <p nz-col [nzSpan]="4" class="text-right margin-bottom-0 padding-right-10 opacity-8">撤单</p>
+          </div>
+          <lib-empty *ngIf="orderList.total === 0"></lib-empty>
+        </ng-container>
+        <ng-container *ngIf="tabType === 1">
+          <lib-empty *ngIf="robotList.total === 0"></lib-empty>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="handicap-area" nz-col [nzSpan]="6">
+    <div class="handicap-top" nz-row>
+      <button nz-col [nzSpan]="12" nz-button nzSize="large" nzType="text" class="handicap-btn"
+        [ngClass]="isSimpleBookList ? '' : 'opacity-5'" (click)="onSwitchSimpleBookList()">
+        <span nz-icon nzType="fullscreen-exit" nzTheme="outline"></span>
+        <span>普通盘口</span>
+      </button>
+      <button nz-col [nzSpan]="12" nz-button nzSize="large" nzType="text" class="handicap-btn"
+        [ngClass]="isSimpleBookList ? 'opacity-5' : ''" (click)="onSwitchSimpleBookList()">
+        <span>高级盘口</span>
+        <span nz-icon nzType="fullscreen" nzTheme="outline"></span>
+      </button>
+    </div>
+    <div class="handicap-head" nz-row>
+      <p class="margin-none" nz-col [nzSpan]="12">价格</p>
+      <p class="margin-none" nz-col [nzSpan]="12">数量</p>
+    </div>
+    <div class="handicap-list">
+      <ul class="handicap-sell padding-none margin-none">
+        <li nz-row class="handicap-item" *ngFor="let item of sellOrderBookList">
+          <span class="handicap-price" nz-col [nzFlex]="1">{{item.price}}</span>
+          <span class="handicap-number" nz-col>{{item.number}}</span>
+        </li>
+      </ul>
+      <div class="handicap-divider"></div>
+      <ul class="handicap-buy padding-none margin-none">
+        <li nz-row class="handicap-item" *ngFor="let item of sellOrderBookList">
+          <span class="handicap-price" nz-col [nzFlex]="1">{{item.price}}</span>
+          <span class="handicap-number" nz-col>{{item.number}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
