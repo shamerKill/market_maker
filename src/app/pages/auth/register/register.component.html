@@ -1,37 +1,61 @@
-<h2 class="login-title" nz-typography>注册</h2>
-<form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+<h2 class="login-title" nz-typography>注册账号</h2>
+<form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
   <!-- 密码输入 -->
   <nz-form-item>
+    <nz-form-label><span style="color:white">用户名</span></nz-form-label>
     <nz-form-control nzErrorTip="请输入正确的用户名!">
-      <nz-input-group nzPrefixIcon="user">
-        <input type="text" nz-input formControlName="username" placeholder="用户名" />
-      </nz-input-group>
-    </nz-form-control>
-  </nz-form-item>
-  <!-- 密码输入 -->
-  <nz-form-item>
-    <nz-form-control nzErrorTip="请输入正确的密码!">
-      <nz-input-group nzPrefixIcon="lock">
-        <input type="password" nz-input formControlName="password" placeholder="密码" />
+      <nz-input-group>
+        <input type="text" nz-input formControlName="username" placeholder="用户名" style="background: #161a2b;border: none;color: #fff;border-radius: 10px;line-height: 40px;" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
   <!-- 账户注册 -->
   <nz-form-item>
+    <nz-form-label><span style="color:white">邮箱</span></nz-form-label>
     <nz-form-control nzErrorTip="请输入正确的邮箱!">
-      <nz-input-group nzPrefixIcon="mail">
-        <input type="email" nz-input formControlName="email" placeholder="邮箱" />
+      <nz-input-group>
+        <input type="email" nz-input formControlName="email" placeholder="邮箱" style="background: #161a2b;border: none;color: #fff;border-radius: 10px;line-height: 40px;" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
   <!-- 验证码输入 -->
   <nz-form-item>
-    <nz-form-control nzErrorTip="请输入正确的验证码!">
-      <nz-input-group nzPrefixIcon="safety-certificate">
-        <input type="text" nz-input formControlName="captcha" placeholder="验证码" />
+    <nz-form-label><span style="color:white">邮箱验证码</span></nz-form-label>
+    <nz-form-control nzErrorTip="请输入邮箱验证码">
+      <div nz-row [nzGutter]="8">
+        <div nz-col [nzSpan]="12">
+          <input nz-input formControlName="captcha" id="captcha" placeholder="请输入邮箱验证码" style="background: #161a2b;border: none;color: #fff;border-radius: 10px;line-height: 40px;" />
+        </div>
+        <div nz-col [nzSpan]="12">
+          <button nz-button (click)="getCaptcha($event)" style="height: 48px;border-radius: 10px;background: #0c0e19;color: #65dc8f;border-color: #354060;">发送验证码</button>
+        </div>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+  <!-- 密码输入 -->
+  <nz-form-item>
+    <nz-form-label><span style="color:white">密码</span></nz-form-label>
+    <nz-form-control nzErrorTip="请输入正确的密码!">
+      <nz-input-group>
+        <input type="password" nz-input formControlName="password" placeholder="密码" style="background: #161a2b;border: none;color: #fff;border-radius: 10px;line-height: 40px;" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
-  <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">注册</button>
-  <a class="register-login" [routerLink]="['/auth/login']">前往登录</a>
+  <nz-form-item>
+    <nz-form-label><span style="color:white">确认密码</span></nz-form-label>
+    <nz-form-control nzErrorTip="请输入正确的密码!">
+      <nz-input-group>
+        <input type="password" nz-input formControlName="password" placeholder="确认密码" style="background: #161a2b;border: none;color: #fff;border-radius: 10px;line-height: 40px;" />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">确认</button>
+  <button nz-button class="login-form-button login-form-margin other" [nzType]="'default'" [routerLink]="['/auth/login']">已有账号？去登录</button>
+  <div nz-row class="login-form-margin">
+    <div nz-col [nzSpan]="16">
+      <label nz-checkbox formControlName="agree">
+        <span style="color: #c9cbd3;">同意闪电 <span style="color: #65dc8f;">《用户协议》</span> </span>
+      </label>
+    </div>
+  </div>
 </form>

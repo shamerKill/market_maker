@@ -19,7 +19,9 @@ export class RegisterComponent {
       password: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(20)]],
     });
   }
-
+  getCaptcha(e: MouseEvent): void {
+    e.preventDefault();
+  }
   submitForm(): void {
     if (this.validateForm.valid) {
       console.log('submit', this.validateForm.value);

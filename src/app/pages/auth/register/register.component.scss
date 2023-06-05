@@ -12,9 +12,21 @@
 .login-title {
   text-align: center;
   animation: into 1s ease-in-out;
+  color: #606782;
+  position: absolute;
+  width: 200px;
+  height: 80px;
+  border-radius: 40px;
+  background: #0c0e19;
+  left: -100px;
+  top: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .login-form {
-  width: 300px;
+  width: 480px;
+  padding-top: 60px;
   animation: into 1s ease-in-out;
 }
 .login-form-margin {
@@ -24,8 +36,17 @@
   float: right;
 }
 .login-form-button {
+  height: 40px;
   width: 100%;
+  border-radius: 10px;
+  background: #65dc8f;
+  color: #000000;
+  &.other{
+    background: #0c0e19;
+    color: #65dc8f;
+    border-color: #354060;
+  }
 }
-.register-login {
-  float: right;
+.label-title{
+  color: #fff !important;
 }
