@@ -13,6 +13,7 @@ import { zh_CN } from 'ng-zorro-antd/i18n';
 import { ThemeService } from './services/theme.service';
 import { MenuService } from './services/data/menu.service';
 import { AuthService } from './services/data/auth.service';
+import { HttpService } from './services/http/http.service';
 
 registerLocaleData(zh);
 
@@ -33,6 +34,7 @@ registerLocaleData(zh);
     ThemeService,
     MenuService,
     AuthService,
+    HttpService,
   ]
 })
 export class AppModule { }

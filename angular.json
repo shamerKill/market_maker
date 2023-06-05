@@ -45,7 +45,10 @@
                 "inject": false
               }
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "mockjs"
+            ]
           },
           "configurations": {
             "production": {
@@ -69,7 +72,13 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environments.ts",
+                  "with": "src/environments/environments.dev.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
