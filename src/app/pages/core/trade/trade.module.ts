@@ -8,6 +8,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 
 import { TradeRoutingModule } from './trade-routing.module';
 import { AlarmsComponent } from './alarms/alarms.component';
@@ -36,6 +38,8 @@ import { NzFormModule } from 'ng-zorro-antd/form';
     FormsModule,
     NzInputModule,
     NzTypographyModule,
+    NzBreadCrumbModule,
+    NzCheckboxModule,
     TradeRoutingModule,
     ComponentsModule,
   ]
