@@ -1,0 +1,69 @@
+.robots-log{
+  &-title{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+    padding: 0 40px;
+  }
+  &-search{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    .flex{
+      display: flex;
+      align-items: center;
+    }
+    &-item{
+      padding-right: 40px;
+      display: flex;
+      align-items: center;
+      .titles{
+        padding-right: 15px;
+        font-size: 14px;
+        color: #9197b1;
+      }
+      nz-range-picker{
+        width: 310px;
+      }
+      nz-select {
+        width: 240px;
+      }
+      input{
+        width: 130px;
+      }
+      .select-item{
+        width: 280px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        nz-select {
+          width: 130px;
+        }
+      }
+    }
+  }
+  &-list{
+    padding: 40px;
+    &-item{
+      display: flex;
+      align-items: center;
+      height: 50px;
+      padding: 0 20px;
+      .time{
+        color: #9197b1;
+        font-size: 16px;
+        padding-right: 40px;
+      }
+      .info{
+        font-size: 16px;
+        color: #eaeaea;
+      }
+      &:nth-child(2n) {
+        background: #272f48;
+      }
+    }
+  }
+}

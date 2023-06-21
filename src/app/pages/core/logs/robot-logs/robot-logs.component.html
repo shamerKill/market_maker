@@ -1,1 +1,67 @@
-<p>robot-logs works!</p>
+<div class="robots-log">
+  <div class="robots-log-title">
+    <nz-breadcrumb nzSeparator=">">
+      <nz-breadcrumb-item>
+        <a>机器人日志</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </div>
+  <div class="robots-log-search">
+    <div class="flex">
+      <div class="robots-log-search-item">
+        <div class="titles">选择日期</div>
+        <nz-range-picker [(ngModel)]="date" (ngModelChange)="onChange($event)"></nz-range-picker>
+      </div>
+      <div class="robots-log-search-item">
+        <div class="titles">交易所</div>
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择交易所" [(ngModel)]="selectedValue">
+          <nz-option nzLabel="lBank" nzValue="lbank"></nz-option>
+          <nz-option nzLabel="hotbit" nzValue="hotbit"></nz-option>
+          <nz-option nzLabel="Binance" nzValue="binance"></nz-option>
+        </nz-select>
+      </div>
+      <div class="robots-log-search-item">
+        <div class="titles">交易对</div>
+        <div class="select-item">
+          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择币种1" [(ngModel)]="selectedValue">
+            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+          </nz-select>
+          <span>-</span>
+          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择币种2" [(ngModel)]="selectedValue">
+            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+          </nz-select>
+        </div>
+      </div>
+      <div class="flex">
+        <input nz-input placeholder="搜索关键字" [(ngModel)]="value" />
+        <button nz-button nzType="primary">查询</button>
+      </div>
+    </div>
+  </div>
+  <div class="robots-log-list">
+    <div class="robots-log-list-item">
+      <div class="time">2023-06-13 07:33:01</div>
+      <div class="info">[用户登录] 登录IP：182.122.67.86</div>
+    </div>
+    <div class="robots-log-list-item">
+      <div class="time">2023-06-13 07:33:01</div>
+      <div class="info">[用户登录] 登录IP：182.122.67.86</div>
+    </div>
+    <div class="robots-log-list-item">
+      <div class="time">2023-06-13 07:33:01</div>
+      <div class="info">[用户登录] 登录IP：182.122.67.86</div>
+    </div>
+    <div class="robots-log-list-item">
+      <div class="time">2023-06-13 07:33:01</div>
+      <div class="info">[用户登录] 登录IP：182.122.67.86</div>
+    </div>
+    <div class="robots-log-list-item">
+      <div class="time">2023-06-13 07:33:01</div>
+      <div class="info">[用户登录] 登录IP：182.122.67.86</div>
+    </div>
+  </div>
+</div>

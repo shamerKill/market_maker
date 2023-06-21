@@ -1,0 +1,123 @@
+.alarms-content{
+  &-title{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+    padding: 0 40px;
+  }
+  &-add{
+    padding: 0 40px;
+  }
+  &-list{
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    &-item{
+      margin-top: 15px;
+      margin-left: 15px;
+      .title{
+        height: 60px;
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+        color: #ffffff;
+      }
+      .info{
+        width: 520px;
+        height: 220px;
+        color: #9197b1;
+        font-size: 14px;
+        background: linear-gradient(to bottom, #354060,#262d47);
+        border-radius: 10px;
+        padding: 20px;
+        &-item{
+          height: 40px;
+          display: flex;
+          align-items: center;
+        }
+        .num{
+          color: #ffffff;
+          padding: 0 5px;
+        }
+        .tips{
+          color: #65dc8f;
+        }
+        &-bottom{
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          margin-top: 30px;
+        }
+        .btns{
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .delete{
+          width: 80px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #1d2236;
+          border-radius: 4px;
+          font-size: 14px;
+          color: #9197b1;
+          margin-left: 15px;
+          &.active{
+            color: #65dc8f;
+            border: 1px solid #65dc8f;
+            background: none;
+          }
+          &.close{
+            color: #89d7ff;
+            border: 1px solid #89d7ff;
+            background: none;
+          }
+        }
+      }
+    }
+  }
+}
+.input-item{
+  display: flex;
+  align-items: center;
+  height: 44px;
+  margin-top: 20px;
+  .title{
+    width: 100px;
+    font-size: 14px;
+    color: #9197b1;
+  }
+  nz-select {
+    width: 400px;
+  }
+  input{
+    width: 400px;
+  }
+  .select-item{
+    width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    nz-select {
+      width: 180px;
+    }
+    input{
+      width: 180px;
+    }
+  }
+}
+.next-step1{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 40px;
+  padding: 0 50px;
+  button{
+    width: 150px;
+  }
+}

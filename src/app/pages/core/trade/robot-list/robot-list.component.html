@@ -10,7 +10,7 @@
   <div class="robot-list">
     <div class="robot-list-title">个人版</div>
     <div class="robot-list-info">
-      <div class="robot-list-item">
+      <div class="robot-list-item" (click)="showModal()">
         <img src="/assets/loginImg/robot1.png" alt="">
         <div class="text">高抛低吸机器人</div>
       </div>
@@ -32,4 +32,55 @@
       </div>
     </div>
   </div>
+  <nz-modal
+    [(nzVisible)]="isVisible"
+    [nzTitle]="modalTitle"
+    nzCentered
+    [nzFooter]="null"
+    [nzContent]="modalContent"
+    (nzOnCancel)="handleCancel()"
+  >
+    <ng-template #modalTitle>盘口管理机器人</ng-template>
+    <ng-template #modalContent>
+      <div class="input-item">
+        <div class="title">交易所</div>
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择交易所" [(ngModel)]="selectedValue">
+          <nz-option nzLabel="lBank" nzValue="lbank"></nz-option>
+          <nz-option nzLabel="hotbit" nzValue="hotbit"></nz-option>
+          <nz-option nzLabel="Binance" nzValue="binance"></nz-option>
+        </nz-select>
+      </div>
+      <div class="input-item">
+        <div class="title">交易对</div>
+        <div class="select-item">
+          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择币种1" [(ngModel)]="selectedValue">
+            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+          </nz-select>
+          <span>-</span>
+          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择币种2" [(ngModel)]="selectedValue">
+            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+          </nz-select>
+        </div>
+      </div>
+      <div class="input-item">
+        <div class="title">价格范围</div>
+        <div class="select-item">
+          <input nz-input placeholder="最大值" [(ngModel)]="value" />
+          <span>-</span>
+          <input nz-input placeholder="最小值" [(ngModel)]="value" />
+        </div>
+      </div>
+      <div class="input-item">
+        <div class="title">手续费</div>
+        <input nz-input placeholder="输入手续费" [(ngModel)]="value" />
+      </div>
+      <div class="next-step">
+        <button nz-button nzType="primary">保存并启动</button>
+      </div>
+    </ng-template>
+  </nz-modal>
 </div>
