@@ -17,6 +17,4 @@ export class HttpService {
     return this.client.post(url, data);
   }
 
-
-
 }
