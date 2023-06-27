@@ -1,1 +1,15 @@
-<p>robots works!</p>
+<div class="robots-work">
+  <div class="robots-work-title">
+    <nz-breadcrumb nzSeparator=">">
+      <nz-breadcrumb-item>
+        <a [routerLink]="['/core/trade/robots']">操盘机器人</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <label nz-checkbox [(ngModel)]="checked">仅显示运行中</label>
+  </div>
+  <div class="robots-work-add">
+    <img src="/assets/loginImg/jiqiren.png" alt="">
+    <div class="text">当前暂无运行中机器人，去开启</div>
+    <button nz-button nzType="primary" [routerLink]="['/core/trade/robot-list']">添加机器人</button>
+  </div>
+</div>

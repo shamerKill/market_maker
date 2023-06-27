@@ -6,5 +6,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./robot-list.component.scss']
 })
 export class RobotListComponent {
-
+  isVisible = false;
+  selectedValue = null;
+  value='';
+  showModal(): void {
+    this.isVisible = true;
+  }
+  handleCancel(): void {
+    this.isVisible = false;
+  }
 }

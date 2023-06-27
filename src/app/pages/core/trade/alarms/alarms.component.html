@@ -1,1 +1,98 @@
-<p>alarms works!</p>
+<div class="alarms-content">
+  <div class="alarms-content-title">
+    <nz-breadcrumb nzSeparator=">">
+      <nz-breadcrumb-item>
+        <a>报警系统</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </div>
+  <div class="alarms-content-add">
+    <button nz-button nzType="primary" (click)="showModal()">新建报警器</button>
+  </div>
+  <div class="alarms-content-list">
+    <div class="alarms-content-list-item">
+      <div class="title">报警器1</div>
+      <div class="info">
+        <div class="info-item">价格高于 <span class="num">0</span>  ｜ 低于 <span class="num">0</span></div>
+        <div class="info-item">低于 <span class="num">0BTC</span>  ｜ 低于 <span class="num">0USDT</span></div>
+        <div class="info-item">价格突变幅度 <span class="num">10%</span></div>
+        <div class="info-bottom">
+          <!-- <div class="tips">盘口出现套利机器人</div> -->
+          <div class="btns">
+            <div class="delete close">停止</div>
+            <div class="delete active">启用</div>
+            <div class="delete">删除</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nz-modal
+    [(nzVisible)]="isVisible"
+    [nzTitle]="modalTitle"
+    nzCentered
+    [nzFooter]="null"
+    [nzContent]="modalContent"
+    (nzOnCancel)="handleCancel()"
+  >
+    <ng-template #modalTitle>新建触发报警器</ng-template>
+    <ng-template #modalContent>
+      <div class="input-item">
+        <div class="title">交易所</div>
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择交易所" [(ngModel)]="selected">
+          <nz-option nzLabel="lBank" nzValue="lBank"></nz-option>
+          <nz-option nzLabel="hotbit" nzValue="hotbit"></nz-option>
+          <nz-option nzLabel="Binance" nzValue="Binance"></nz-option>
+        </nz-select>
+      </div>
+      <div class="input-item">
+        <div class="title">交易对</div>
+        <div class="select-item">
+          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择币种1" [(ngModel)]="selectedValue">
+            <nz-option nzLabel="PC" nzValue="PC"></nz-option>
+            <nz-option nzLabel="BTC" nzValue="BTC"></nz-option>
+            <nz-option nzLabel="ETH" nzValue="ETH"></nz-option>
+            <nz-option nzLabel="TRX" nzValue="TRX"></nz-option>
+          </nz-select>
+          <span>-</span>
+          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择币种2" [(ngModel)]="selectedValue1">
+            <nz-option nzLabel="USDT" nzValue="USDT"></nz-option>
+            <nz-option nzLabel="BNB" nzValue="BNB"></nz-option>
+            <nz-option nzLabel="BUSD" nzValue="BUSD"></nz-option>
+          </nz-select>
+        </div>
+      </div>
+      <div class="input-item">
+        <div class="title">价格高于</div>
+        <input nz-input placeholder="输入价格高于" [(ngModel)]="value" />
+      </div>
+      <div class="input-item">
+        <div class="title">价格低于</div>
+        <input nz-input placeholder="输入价格低于" [(ngModel)]="value" />
+      </div>
+      <div class="input-item">
+        <div class="title">{{selectedValue}}少于</div>
+        <input nz-input placeholder="请输入" [(ngModel)]="value" />
+      </div>
+      <div class="input-item">
+        <div class="title">{{selectedValue1}}少于</div>
+        <input nz-input placeholder="请输入" [(ngModel)]="value" />
+      </div>
+      <div class="input-item">
+        <div class="title">价格突变幅度</div>
+        <input nz-input placeholder="价格突变幅度" [(ngModel)]="value" />
+      </div>
+      <!-- <div class="input-item">
+        <div class="title">出现机器人</div>
+        <nz-radio-group [(ngModel)]="radioValue">
+          <label nz-radio nzValue="A">是</label>
+          <label nz-radio nzValue="B">否</label>
+        </nz-radio-group>
+      </div> -->
+      <div class="next-step1">
+        <button nz-button nzType="default">保存</button>
+        <button nz-button nzType="primary" (click)="submitStart()">保存并启动</button>
+      </div>
+    </ng-template>
+  </nz-modal>
+</div>

@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./robots.component.scss']
 })
 export class RobotsComponent {
-
+  checked = false;
 }
