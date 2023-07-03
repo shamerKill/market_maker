@@ -1,14 +1,5 @@
 <h2 class="login-title" nz-typography>注册账号</h2>
-<form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
-  <!-- 密码输入 -->
-  <nz-form-item>
-    <nz-form-label><span style="color:white">用户名</span></nz-form-label>
-    <nz-form-control nzErrorTip="请输入正确的用户名!">
-      <nz-input-group>
-        <input type="text" nz-input formControlName="username" placeholder="用户名" style="background: #161a2b;border: none;color: #fff;border-radius: 10px;line-height: 40px;" />
-      </nz-input-group>
-    </nz-form-control>
-  </nz-form-item>
+<form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="login-form" (ngSubmit)="checkForm()">
   <!-- 账户注册 -->
   <nz-form-item>
     <nz-form-label><span style="color:white">邮箱</span></nz-form-label>
@@ -24,10 +15,12 @@
     <nz-form-control nzErrorTip="请输入邮箱验证码">
       <div nz-row [nzGutter]="8">
         <div nz-col [nzSpan]="12">
-          <input nz-input formControlName="captcha" id="captcha" placeholder="请输入邮箱验证码" style="background: #161a2b;border: none;color: #fff;border-radius: 10px;line-height: 40px;" />
+          <input type="text" nz-input formControlName="captcha" id="captcha" placeholder="请输入邮箱验证码" style="background: #161a2b;border: none;color: #fff;border-radius: 10px;line-height: 40px;" />
         </div>
         <div nz-col [nzSpan]="12">
-          <button nz-button (click)="getCaptcha($event)" style="height: 48px;border-radius: 10px;background: #0c0e19;color: #65dc8f;border-color: #354060;">发送验证码</button>
+          <button nz-button (click)="getCaptcha($event)" style="height: 48px;border-radius: 10px;background: #0c0e19;color: #65dc8f;border-color: #354060;">
+            {{codeWaitTime === 0 ? '发送验证码' : '重新发送(' + codeWaitTime + ')'}}
+          </button>
         </div>
       </div>
     </nz-form-control>
@@ -45,7 +38,7 @@
     <nz-form-label><span style="color:white">确认密码</span></nz-form-label>
     <nz-form-control nzErrorTip="请输入正确的密码!">
       <nz-input-group>
-        <input type="password" nz-input formControlName="password" placeholder="确认密码" style="background: #161a2b;border: none;color: #fff;border-radius: 10px;line-height: 40px;" />
+        <input type="password" nz-input formControlName="rePassword" placeholder="确认密码" style="background: #161a2b;border: none;color: #fff;border-radius: 10px;line-height: 40px;" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
@@ -53,9 +46,9 @@
   <button nz-button class="login-form-button login-form-margin other" [nzType]="'default'" [routerLink]="['/auth/login']">已有账号？去登录</button>
   <div nz-row class="login-form-margin">
     <div nz-col [nzSpan]="16">
-      <label nz-checkbox formControlName="agree">
-        <span style="color: #c9cbd3;">同意闪电 <span style="color: #65dc8f;">《用户协议》</span> </span>
-      </label>
+    <label nz-checkbox formControlName="agree">
+      <span style="color: #c9cbd3;">同意Maker <span style="color: #65dc8f;">《用户协议》</span> </span>
+    </label>
     </div>
   </div>
 </form>

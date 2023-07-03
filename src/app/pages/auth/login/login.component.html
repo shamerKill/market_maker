@@ -1,5 +1,5 @@
-<h2 class="login-title" nz-typography>登录PLUG</h2>
-<form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+<h2 class="login-title" nz-typography>登录Maker</h2>
+<form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="login-form" (ngSubmit)="checkForm()">
   <nz-form-item>
     <nz-form-label><span style="color:white">用户名</span></nz-form-label>
     <nz-form-control nzErrorTip="请输入正确的用户名!">
@@ -19,7 +19,7 @@
   <div nz-row class="login-form-margin">
     <div nz-col [nzSpan]="16">
       <label nz-checkbox formControlName="agree">
-        <span style="color: #c9cbd3;">同意闪电 <span style="color: #65dc8f;">《用户协议》</span> </span>
+        <span style="color: #c9cbd3;">同意Maker <span style="color: #65dc8f;">《用户协议》</span> </span>
       </label>
     </div>
     <div nz-col [nzSpan]="8">

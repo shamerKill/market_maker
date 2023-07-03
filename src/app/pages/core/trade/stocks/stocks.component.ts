@@ -1,5 +1,6 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { toolNumberAdd, toolNumberCut } from 'src/app/tools/number';
 
 @Component({
   selector: 'lib-stocks',
@@ -7,6 +8,13 @@ import { NzMessageService } from 'ng-zorro-antd/message';
   styleUrls: ['./stocks.component.scss']
 })
 export class StocksComponent implements AfterViewInit {
+  selectModalValue = {
+    isVisible: false,
+    collectionValue: '',
+    platformValue: '',
+    symbolOneValue: '',
+    symbolTwoValue: '',
+  }
 
   // 平台
   platform: string = '币安';
@@ -84,8 +92,8 @@ export class StocksComponent implements AfterViewInit {
     }
   }
 
-  onSelectPlatform() {
-
+  onSelectPlatform(type: boolean) {
+    this.selectModalValue.isVisible = type;
   }
 
   onSwitchSimpleBookList() {
@@ -94,17 +102,19 @@ export class StocksComponent implements AfterViewInit {
 
   onManualOrderPriceChange(type: 'add'|'cut') {
     if (type === 'add') {
-      this.manualOrder.price = (Number(this.manualOrder.price) + Number(this.manualOrder.priceStep)).toString();
+      this.manualOrder.price = toolNumberAdd(this.manualOrder.price, this.manualOrder.priceStep);
     } else {
-      this.manualOrder.price = (Number(this.manualOrder.price) - Number(this.manualOrder.priceStep)).toString();
+      const price = toolNumberCut(this.manualOrder.price, this.manualOrder.priceStep);
+      if (Number(price) >= 0) this.manualOrder.price = price;
     }
   }
 
   onManualOrderNumberChange(type: 'add'|'cut') {
     if (type === 'add') {
-      this.manualOrder.number = (Number(this.manualOrder.number) + Number(this.manualOrder.numberStep)).toString();
+      this.manualOrder.number = toolNumberAdd(this.manualOrder.number, this.manualOrder.numberStep);
     } else {
-      this.manualOrder.number = (Number(this.manualOrder.number) - Number(this.manualOrder.numberStep)).toString();
+      const num = toolNumberCut(this.manualOrder.number, this.manualOrder.numberStep);
+      if (Number(num) >= 0) this.manualOrder.number = num;
     }
   }
 }

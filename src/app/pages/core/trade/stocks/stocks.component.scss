@@ -189,3 +189,41 @@ $box-bg: linear-gradient(to bottom, rgba($attach-bg-color, 1),rgba($attach-bg-co
   max-height: 3em;
   align-items: center;
 }
+
+
+
+.input-item{
+  display: flex;
+  align-items: center;
+  height: 44px;
+  margin-top: 20px;
+  .title{
+    width: 100px;
+    font-size: 14px;
+    color: #9197b1;
+  }
+  nz-select {
+    width: 400px;
+  }
+  input{
+    width: 400px;
+  }
+  .select-item{
+    width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    nz-select {
+      width: 180px;
+    }
+    input{
+      width: 180px;
+    }
+  }
+}
+.next-step{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
