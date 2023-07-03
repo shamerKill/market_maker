@@ -10,7 +10,7 @@
     <div class="flex">
       <div class="robots-log-search-item">
         <div class="titles">选择日期</div>
-        <nz-range-picker [(ngModel)]="date" (ngModelChange)="onChange($event)"></nz-range-picker>
+        <nz-range-picker [(ngModel)]="date" nzFormat="yyyy/MM/dd" (ngModelChange)="onChange($event)"></nz-range-picker>
       </div>
       <div class="robots-log-search-item">
         <div class="titles">交易所</div>

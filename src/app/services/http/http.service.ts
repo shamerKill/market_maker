@@ -10,6 +10,12 @@ type resType = {
   data: string,
   trace_id: string,
 };
+type reqType = {
+  errno: number,
+  errmsg: string,
+  data: Array<any>|Object,
+  trace_id: string,
+};
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +43,7 @@ export class HttpService {
   }
 
   get(url: string, options?: { withToken?: boolean }) {
-    return this.client.get(this.getUrl(url));
+    return this.client.get<reqType>(this.getUrl(url));
   }
 
   post(url: string, data: any, options?: { withToken?: boolean }) {

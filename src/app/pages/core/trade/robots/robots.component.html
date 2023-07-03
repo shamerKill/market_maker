@@ -5,7 +5,7 @@
         <a [routerLink]="['/core/trade/robots']">操盘机器人</a>
       </nz-breadcrumb-item>
     </nz-breadcrumb>
-    <label nz-checkbox [(ngModel)]="checked">仅显示运行中</label>
+    <label nz-checkbox [(ngModel)]="checked" (ngModelChange)="updateAllChecked()">仅显示运行中</label>
   </div>
   <div class="robots-work-add">
     <img src="/assets/loginImg/jiqiren.png" alt="">

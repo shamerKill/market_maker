@@ -10,6 +10,9 @@ export class RobotLogsComponent {
   selectedValue = null;
   value = '';
   onChange(result: Date[]): void {
+    if (result.length == 0) return
     console.log('onChange: ', result);
+    console.log('onChange: ', Number(result[0]));
+    console.log('onChange: ', result[0].toLocaleDateString());
   }
 }

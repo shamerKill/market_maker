@@ -10,25 +10,17 @@
   <div class="robot-list">
     <div class="robot-list-title">个人版</div>
     <div class="robot-list-info">
-      <div class="robot-list-item" (click)="showModal()">
+      <div class="robot-list-item" (click)="showModal('healing')">
         <img src="/assets/loginImg/robot1.png" alt="">
-        <div class="text">高抛低吸机器人</div>
+        <div class="text">跟盘机器人</div>
       </div>
-      <div class="robot-list-item">
+      <div class="robot-list-item" (click)="showModal('kline')">
         <img src="/assets/loginImg/robot2.png" alt="">
-        <div class="text">分批卖出机器人</div>
+        <div class="text">画线机器人</div>
       </div>
-      <div class="robot-list-item">
+      <div class="robot-list-item" (click)="showModal('handle')">
         <img src="/assets/loginImg/robot3.png" alt="">
-        <div class="text">搬砖机器人</div>
-      </div>
-      <div class="robot-list-item">
-        <img src="/assets/loginImg/robot4.png" alt="">
-        <div class="text">马丁策略量化机器人</div>
-      </div>
-      <div class="robot-list-item">
-        <img src="/assets/loginImg/robot5.png" alt="">
-        <div class="text">网络策略机器人</div>
+        <div class="text">盘口机器人</div>
       </div>
     </div>
   </div>
@@ -44,39 +36,68 @@
     <ng-template #modalContent>
       <div class="input-item">
         <div class="title">交易所</div>
-        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择交易所" [(ngModel)]="selectedValue">
-          <nz-option nzLabel="lBank" nzValue="lbank"></nz-option>
-          <nz-option nzLabel="hotbit" nzValue="hotbit"></nz-option>
-          <nz-option nzLabel="Binance" nzValue="binance"></nz-option>
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择交易所" [(ngModel)]="modalInfo.exchange">
+          <nz-option *ngFor="let item of exchangeList" [nzLabel]="item.name" [nzValue]="item.mark"></nz-option>
         </nz-select>
       </div>
       <div class="input-item">
         <div class="title">交易对</div>
         <div class="select-item">
-          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择币种1" [(ngModel)]="selectedValue">
-            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
-            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
-            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
-          </nz-select>
+          <input nz-input placeholder="币种A" [(ngModel)]="modalInfo.tokenA" />
           <span>-</span>
-          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择币种2" [(ngModel)]="selectedValue">
-            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
-            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
-            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
-          </nz-select>
+          <input nz-input placeholder="币种B" [(ngModel)]="modalInfo.tokenB" />
         </div>
       </div>
-      <div class="input-item">
+      <div class="input-item" *ngIf="bot == 'handle'">
+        <div class="title">维护档位数</div>
+        <input nz-input placeholder="输入维护档位数" [(ngModel)]="modalInfo.gear_count" />
+      </div>
+      <div class="input-item" *ngIf="bot == 'kline'">
         <div class="title">价格范围</div>
         <div class="select-item">
-          <input nz-input placeholder="最大值" [(ngModel)]="value" />
+          <input nz-input placeholder="最大值" [(ngModel)]="modalInfo.limit_max" />
           <span>-</span>
-          <input nz-input placeholder="最小值" [(ngModel)]="value" />
+          <input nz-input placeholder="最小值" [(ngModel)]="modalInfo.limit_min" />
         </div>
       </div>
+      <div class="input-item" *ngIf="bot == 'healing'">
+        <div class="title">模式</div>
+        <nz-radio-group [(ngModel)]="modalInfo.mode" nzButtonStyle="solid">
+          <label nz-radio-button nzValue="标准">标准模式</label>
+          <label nz-radio-button nzValue="对冲">对冲模式</label>
+        </nz-radio-group>
+      </div>
+      <div class="input-item" *ngIf="bot == 'healing'">
+        <div class="title">目标盘口</div>
+        <input nz-input placeholder="输入维护档位数" [(ngModel)]="modalInfo.target" />
+      </div>
       <div class="input-item">
-        <div class="title">手续费</div>
-        <input nz-input placeholder="输入手续费" [(ngModel)]="value" />
+        <div class="title">盘口差价</div>
+        <input nz-input placeholder="输入盘口差价" [(ngModel)]="modalInfo.handle_difference" />
+      </div>
+      <div class="input-item">
+        <div class="title">每档差价</div>
+        <input nz-input placeholder="输入每档差价" [(ngModel)]="modalInfo.gear_difference" />
+      </div>
+      <div class="input-item">
+        <div class="title">买盘每档数量</div>
+        <input nz-input placeholder="输入买盘每档数量" [(ngModel)]="modalInfo.buy_num" />
+      </div>
+      <div class="input-item">
+        <div class="title">卖盘每档数量</div>
+        <input nz-input placeholder="输入卖盘每档数量" [(ngModel)]="modalInfo.sell_num" />
+      </div>
+      <div class="input-item" *ngIf="bot != 'handle'">
+        <div class="title">单次最大吃单</div>
+        <input nz-input placeholder="输入单次最大吃单" [(ngModel)]="modalInfo.max_num" />
+      </div>
+      <div class="input-item">
+        <div class="title">价格小数点位数</div>
+        <input nz-input placeholder="输入价格小数点位数" [(ngModel)]="modalInfo.decimal" />
+      </div>
+      <div class="input-item" *ngIf="bot != 'handle'">
+        <div class="title">每日刷单总量</div>
+        <input nz-input placeholder="输入每日刷单总量" [(ngModel)]="modalInfo.day_count" />
       </div>
       <div class="next-step">
         <button nz-button nzType="primary">保存并启动</button>
