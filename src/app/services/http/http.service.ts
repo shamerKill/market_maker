@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 type resType = {
   errno: number,
   errmsg: string,
-  data: string,
+  data: any,
   trace_id: string,
 };
 
@@ -37,7 +37,7 @@ export class HttpService {
   }
 
   get(url: string, options?: { withToken?: boolean }) {
-    return this.client.get(this.getUrl(url));
+    return this.client.get<resType>(this.getUrl(url));
   }
 
   post(url: string, data: any, options?: { withToken?: boolean }) {
