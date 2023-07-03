@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 
 type resType = {
@@ -67,23 +67,27 @@ export class HttpService {
       account: account,
       pass: password,
     }).pipe(res => {
+      const sub = new Subject<resType>();
       res.subscribe(data => {
         if (data.errno === 200) {
           this.token_set(data.data);
         }
+        sub.next(data);
       });
-      return res;
+      return sub;
     });
   }
 
   private check_login(res: Observable<resType>): Observable<resType> {
+    const sub = new Subject<resType>();
     res.subscribe(data => {
+      sub.next(data);
       if (data.errno === 20001) {
         window.localStorage.removeItem('market_token');
         this.router.navigate(['/auth/login']);
         window.location.reload();
       }
     });
-    return res;
+    return sub;
   }
 }
