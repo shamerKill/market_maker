@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { BehaviorSubject } from 'rxjs';
+import { HttpService } from 'src/app/services/http/http.service';
 import { toolNumberAdd, toolNumberCut } from 'src/app/tools/number';
 
 @Component({
@@ -17,8 +18,11 @@ export class StocksComponent implements OnInit, AfterViewInit {
     symbolTwoValue: '',
   }
 
+  collectionList: {name: string, mark: string, symbols: string[]}[] = JSON.parse(window.localStorage.getItem('maker_collection') || '[]') || [];
+
+  exchangeList: {name: string, mark: string, logo: string}[] = [];
   // 平台
-  platform: string = '';
+  platform?: {name: string, mark: string, logo?: string};
   // 币种
   symbols: BehaviorSubject<string[]> = new BehaviorSubject([] as string[]);
   // 是否被收藏
@@ -78,9 +82,17 @@ export class StocksComponent implements OnInit, AfterViewInit {
 
   constructor(
     private message: NzMessageService,
+    private http: HttpService,
   ) { }
 
   ngOnInit(): void {
+    try {
+      this.platform = JSON.parse(window.localStorage.getItem('maker_platform')||'');
+      this.symbols.next(JSON.parse(window.localStorage.getItem('maker_symbols')||''));
+      this.selectModalValue.platformValue = this.platform?.mark || '';
+      this.selectModalValue.symbolOneValue = this.symbols.getValue()[0] || '';
+      this.selectModalValue.symbolTwoValue = this.symbols.getValue()[1] || '';
+    } catch {}
     // 如果没有盘口，选择盘口
     if (this.symbols.getValue().length === 0) {
       this.onSelectPlatform(true);
@@ -93,15 +105,32 @@ export class StocksComponent implements OnInit, AfterViewInit {
 
   onSwitchCollected() {
     this.isCollected = !this.isCollected;
+    if (!this.platform) return;
     if (this.isCollected) {
+      this.collectionList.push({name: this.platform?.name, mark: this.platform?.mark, symbols: this.symbols.getValue()});
+      window.localStorage.setItem('maker_collection', JSON.stringify(this.collectionList));
       this.message.success('收藏成功');
     } else {
+      this.collectionList = this.collectionList.filter(item => item.mark !== this.platform?.mark);
+      window.localStorage.setItem('maker_collection', JSON.stringify(this.collectionList));
       this.message.success('取消收藏成功');
     }
   }
 
   onSelectPlatform(type: boolean) {
     this.selectModalValue.isVisible = type;
+    // 获取交易所列表
+    if (type === true) {
+      if (this.exchangeList.length === 0) {
+        this.http.get('/exchange').subscribe(res => {
+          if (res.errno !== 200) {
+            this.message.error(res.errmsg);
+            return;
+          }
+          this.exchangeList = res.data;
+        });
+      }
+    }
   }
 
   onSwitchSimpleBookList() {
@@ -123,6 +152,38 @@ export class StocksComponent implements OnInit, AfterViewInit {
     } else {
       const num = toolNumberCut(this.manualOrder.number, this.manualOrder.numberStep);
       if (Number(num) >= 0) this.manualOrder.number = num;
+    }
+  }
+
+  onWatchCollectionInput(event: number) {
+    const select = this.collectionList[event];
+    this.selectModalValue.platformValue = select.mark;
+    this.selectModalValue.symbolOneValue = select.symbols[0];
+    this.selectModalValue.symbolTwoValue = select.symbols[1];
+  }
+
+  onSelectPairs() {
+    if (!this.selectModalValue.platformValue || !this.selectModalValue.symbolOneValue || !this.selectModalValue.symbolTwoValue)  {
+      this.message.warning('请检查列表是否选择完整');
+      return;
+    }
+    this.platform = this.exchangeList.find(item => item.mark === this.selectModalValue.platformValue);
+    this.symbols.next([this.selectModalValue.symbolOneValue, this.selectModalValue.symbolTwoValue]);
+    this.onSelectPlatform(false);
+    this._onWatchPair();
+  }
+
+  private _onWatchPair() {
+    window.localStorage.setItem('maker_platform', JSON.stringify(this.platform));
+    window.localStorage.setItem('maker_symbols', JSON.stringify(this.symbols.getValue()));
+    if (this.collectionList.find(item =>
+      item.mark === this.platform?.mark
+      && item.symbols.includes(this.selectModalValue.symbolOneValue)
+      && item.symbols.includes(this.selectModalValue.symbolTwoValue)
+    )) {
+      this.isCollected = true;
+    } else {
+      this.isCollected = false;
     }
   }
 }

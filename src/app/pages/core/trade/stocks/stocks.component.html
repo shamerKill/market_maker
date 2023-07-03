@@ -3,7 +3,7 @@
     <div class="page-info" nz-row nzAlign="middle">
       <p class="margin-none" nz-col>
         当前盘口：
-        <span class="page-info-value">{{platform}} {{(symbols|async)?.join('/')}}</span>
+        <span class="page-info-value">{{platform?.name}} {{(symbols|async)?.join('/')}}</span>
       </p>
       <button nz-button nzType="text" nz-col [nzSpan]="4" [nzOffset]="1" (click)="onSwitchCollected()">
         <span nz-icon nzType="star" [ngClass]="isCollected ? 'color-primary' : 'opacity-5'"
@@ -158,38 +158,26 @@ nzCentered
 <ng-template #modalContent>
   <div class="input-item">
     <div class="title">收藏列表</div>
-    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="收藏列表" [(ngModel)]="selectModalValue.collectionValue">
-      <nz-option nzLabel="lBank-PC/USDT" nzValue="lbank"></nz-option>
-      <nz-option nzLabel="hotbit-PC/USDT" nzValue="hotbit"></nz-option>
-      <nz-option nzLabel="Binance-PC/USDT" nzValue="binance"></nz-option>
+    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="收藏列表" [(ngModel)]="selectModalValue.collectionValue" (ngModelChange)="onWatchCollectionInput($event)">
+      <nz-option *ngFor="let item of collectionList; let index = index;" [nzLabel]="item.name + '-' + item.symbols.join('/')" [nzValue]="index"></nz-option>
     </nz-select>
   </div>
   <div class="input-item">
     <div class="title">交易所</div>
     <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择交易所" [(ngModel)]="selectModalValue.platformValue">
-      <nz-option nzLabel="lBank" nzValue="lbank"></nz-option>
-      <nz-option nzLabel="hotbit" nzValue="hotbit"></nz-option>
-      <nz-option nzLabel="Binance" nzValue="binance"></nz-option>
+      <nz-option *ngFor="let item of exchangeList" [nzLabel]="item.name" [nzValue]="item.mark"></nz-option>
     </nz-select>
   </div>
   <div class="input-item">
     <div class="title">交易对</div>
     <div class="select-item">
-      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择币种1" [(ngModel)]="selectModalValue.symbolOneValue">
-        <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
-        <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
-        <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
-      </nz-select>
+      <input nz-input type="text" class="text-center" placeholder="选择币种1" [(ngModel)]="selectModalValue.symbolOneValue">
       <span>-</span>
-      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择币种2" [(ngModel)]="selectModalValue.symbolTwoValue">
-        <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
-        <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
-        <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
-      </nz-select>
+      <input nz-input type="text" class="text-center" placeholder="选择币种2" [(ngModel)]="selectModalValue.symbolTwoValue">
     </div>
   </div>
   <div class="next-step">
-    <button nz-button nzType="primary">切换</button>
+    <button (click)="onSelectPairs()" nz-button nzType="primary">切换</button>
   </div>
 </ng-template>
 </nz-modal>

@@ -36,8 +36,17 @@ export class HttpService {
     this.token_get();
   }
 
-  get(url: string, options?: { withToken?: boolean }) {
-    return this.client.get<resType>(this.getUrl(url));
+  get(url: string, data?: {[key: string]: string|number}|string, options?: { withToken?: boolean }) {
+    let params = options?.withToken ? '?token=' + this.token + '&' : '';
+    if (data !== undefined) params += '?';
+    if (typeof data === 'object') {
+      for (let key in data) {
+        params += key + '=' + data[key] + '&';
+      }
+    } else {
+      params += data;
+    }
+    return this.client.get<resType>(this.getUrl(url) + params).pipe(this.check_login);
   }
 
   post(url: string, data: any, options?: { withToken?: boolean }) {
