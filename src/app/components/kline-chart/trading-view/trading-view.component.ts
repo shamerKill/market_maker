@@ -18,19 +18,19 @@ export class TradingViewComponent implements AfterViewInit {
   }
 
   async loadTradingView() {
-    const iframe = document.createElement('iframe');
-    iframe.src = 'https://www.xt.com/zh-CN/trade/pc_usdt';
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    if (this.tradingView) {
-      this.tradingView.nativeElement.appendChild(iframe);
-    }
-    iframe.onload = (e) => {
-      console.log(e);
-      console.log('加载完毕');
-    };
-    iframe.onerror = () => {
-      console.log('加载失败');
-    }
+    // const iframe = document.createElement('iframe');
+    // iframe.src = 'https://www.xt.com/zh-CN/trade/pc_usdt';
+    // iframe.style.width = '100%';
+    // iframe.style.height = '100%';
+    // if (this.tradingView) {
+    //   this.tradingView.nativeElement.appendChild(iframe);
+    // }
+    // iframe.onload = (e) => {
+    //   console.log(e);
+    //   console.log('加载完毕');
+    // };
+    // iframe.onerror = () => {
+    //   console.log('加载失败');
+    // }
   }
 }

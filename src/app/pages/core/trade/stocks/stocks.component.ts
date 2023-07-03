@@ -1,5 +1,6 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { BehaviorSubject } from 'rxjs';
 import { toolNumberAdd, toolNumberCut } from 'src/app/tools/number';
 
 @Component({
@@ -7,7 +8,7 @@ import { toolNumberAdd, toolNumberCut } from 'src/app/tools/number';
   templateUrl: './stocks.component.html',
   styleUrls: ['./stocks.component.scss']
 })
-export class StocksComponent implements AfterViewInit {
+export class StocksComponent implements OnInit, AfterViewInit {
   selectModalValue = {
     isVisible: false,
     collectionValue: '',
@@ -17,9 +18,9 @@ export class StocksComponent implements AfterViewInit {
   }
 
   // 平台
-  platform: string = '币安';
+  platform: string = '';
   // 币种
-  symbol: string = 'BTC/USDT';
+  symbols: BehaviorSubject<string[]> = new BehaviorSubject([] as string[]);
   // 是否被收藏
   isCollected: boolean = false;
 
@@ -78,6 +79,13 @@ export class StocksComponent implements AfterViewInit {
   constructor(
     private message: NzMessageService,
   ) { }
+
+  ngOnInit(): void {
+    // 如果没有盘口，选择盘口
+    if (this.symbols.getValue().length === 0) {
+      this.onSelectPlatform(true);
+    }
+  }
 
   ngAfterViewInit(): void {
   }

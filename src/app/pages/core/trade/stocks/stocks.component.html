@@ -3,7 +3,7 @@
     <div class="page-info" nz-row nzAlign="middle">
       <p class="margin-none" nz-col>
         当前盘口：
-        <span class="page-info-value">币安 BTC/USDT</span>
+        <span class="page-info-value">{{platform}} {{(symbols|async)?.join('/')}}</span>
       </p>
       <button nz-button nzType="text" nz-col [nzSpan]="4" [nzOffset]="1" (click)="onSwitchCollected()">
         <span nz-icon nzType="star" [ngClass]="isCollected ? 'color-primary' : 'opacity-5'"
