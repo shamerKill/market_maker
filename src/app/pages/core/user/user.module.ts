@@ -6,6 +6,13 @@ import { AccountListComponent } from './account-list/account-list.component';
 import { RechargeComponent } from './recharge/recharge.component';
 import { SettingsComponent } from './settings/settings.component';
 import { UpgradeComponent } from './upgrade/upgrade.component';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { FormsModule } from '@angular/forms';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzMessageModule } from 'ng-zorro-antd/message';
 
 
 @NgModule({
@@ -17,7 +24,14 @@ import { UpgradeComponent } from './upgrade/upgrade.component';
   ],
   imports: [
     CommonModule,
+    NzButtonModule,
+    NzGridModule,
     UserRoutingModule,
+    NzModalModule,
+    NzSelectModule,
+    FormsModule,
+    NzInputModule,
+    NzMessageModule,
   ]
 })
 export class UserModule { }

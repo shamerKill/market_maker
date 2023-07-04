@@ -16,7 +16,7 @@ type resType = {
 })
 export class HttpService {
   private protocol = 'http';
-  private host = '192.168.3.174:8553';
+  private host = '47.243.255.151:8553';
   private token: string | null = null;
   private getUrl(url: string) {
     let result = this.host + '/' + url;
@@ -37,13 +37,13 @@ export class HttpService {
   }
 
   get(url: string, data?: {[key: string]: string|number}|string, options?: { withToken?: boolean }) {
-    let params = options?.withToken ? '?token=' + this.token + '&' : '';
-    if (data !== undefined) params += '?';
+    let params = options?.withToken ? ('?token=' + this.token + '&') : '';
+    if (data !== undefined && !params) params += '?';
     if (typeof data === 'object') {
       for (let key in data) {
         params += key + '=' + data[key] + '&';
       }
-    } else {
+    } else if (data) {
       params += data;
     }
     return this.client.get<resType>(this.getUrl(url) + params).pipe(this.check_login);
@@ -55,7 +55,7 @@ export class HttpService {
       for (let key in data) {
         body.append(key, data[key]);
       }
-    } else {
+    } else if (data instanceof FormData) {
       body = data;
     }
     if (options?.withToken) body.append('token', this.token||'');

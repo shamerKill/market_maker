@@ -1,1 +1,175 @@
-<p>account-list works!</p>
+<div class="content">
+  <h2 class="title">账号列表</h2>
+  <button (click)="createIsVisible = true" class="create-btn" nz-button nzType="primary">
+    绑定新账号
+  </button>
+  <div class="card-list" nz-row>
+    <div class="card-item" nz-col [nzSpan]="7" *ngFor="let item of accountList">
+      <p class="card-title">{{item.name}}</p>
+      <div class="card-content">
+        <div class="card-line" nz-row>
+          <p class="card-desc" nz-col [nzSpan]="10">交易所</p>
+          <p class="card-detail">{{item.exchange}}</p>
+        </div>
+        <div class="card-line" nz-row>
+          <p class="card-desc" nz-col [nzSpan]="10">API Key</p>
+          <p class="card-detail">{{item.APIKey}}</p>
+        </div>
+        <div class="card-line" nz-row>
+          <p class="card-desc" nz-col [nzSpan]="10">Secret Key</p>
+          <p class="card-detail">{{item.APISecret}}</p>
+        </div>
+        <div class="card-line" nz-row>
+          <p class="card-desc" nz-col [nzSpan]="10">Account-ID</p>
+          <p class="card-detail">{{item.accountID}}</p>
+        </div>
+        <div class="card-footer" nz-row>
+          <button
+            nz-button
+            nzType="default"
+            nz-col
+            [nzOffset]="10"
+            [nzSpan]="6"
+            class="card-edit"
+            (click)="onToggleEdit(true, item.accountID)">
+            修改
+          </button>
+          <button
+            nz-button
+            nzType="dashed"
+            nz-col
+            [nzOffset]="1"
+            [nzSpan]="6"
+            class="card-del"
+            (click)="onDelete(item.accountID)">
+            删除
+          </button>
+        </div>
+      </div>
+    </div>
+    <p *ngIf="accountList.length === 0 && !isInitLoading" class="card-no-data">暂无数据</p>
+  </div>
+</div>
+
+
+<nz-modal
+[(nzVisible)]="createIsVisible"
+[nzTitle]="modalTitle"
+nzCentered
+[nzFooter]="null"
+[nzContent]="modalContent"
+(nzOnCancel)="createIsVisible = false"
+>
+<ng-template #modalTitle>创建账号</ng-template>
+<ng-template #modalContent>
+  <div class="input-item">
+    <div class="title">账号名称</div>
+    <input
+      nz-input
+      type="text"
+      class="text-center"
+      placeholder="请输入"
+      [(ngModel)]="createModalValue.name">
+  </div>
+  <div class="input-item">
+    <div class="title">交易所</div>
+    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择交易所" [(ngModel)]="createModalValue.exchange">
+      <nz-option *ngFor="let item of exchangeList" [nzLabel]="item.name" [nzValue]="item.mark"></nz-option>
+    </nz-select>
+  </div>
+  <div class="input-item">
+    <div class="title">API Key</div>
+    <input
+      nz-input
+      type="text"
+      class="text-center"
+      placeholder="请输入"
+      [(ngModel)]="createModalValue.APIKey">
+  </div>
+  <div class="input-item">
+    <div class="title">Secret Key</div>
+    <input
+      nz-input
+      type="text"
+      class="text-center"
+      placeholder="请输入"
+      [(ngModel)]="createModalValue.APISecret">
+  </div>
+  <div class="input-item">
+    <div class="title">邮箱</div>
+    <p>{{email}}</p>
+  </div>
+  <div class="input-item">
+    <div class="title">邮箱验证码</div>
+    <div>
+      <input
+        nz-input
+        type="text"
+        class="text-center code-input"
+        placeholder="请输入"
+        [(ngModel)]="createModalValue.code">
+        <button
+          nz-button
+          class="send-code-btn"
+          type="default"
+          (click)="getCaptcha()">
+          {{codeWaitTime === 0 ? '发送验证码' : '重新发送(' + codeWaitTime + ')'}}
+        </button>
+    </div>
+  </div>
+  <p class="model-desc model-desc-padding">IP白名单:<<ng-container *ngFor="let item of ips"><span>{{item}}</span> , </ng-container>></p>
+  <p class="model-desc">获取到交易所的APIKey和APISecret后，注意填写时不要有空格</p>
+  <div class="next-step">
+    <button
+      [disabled]="createLoading"
+      (click)="onCreateAccount()"
+      nz-button
+      nzType="primary">确定</button>
+  </div>
+</ng-template>
+</nz-modal>
+
+
+<nz-modal
+  [(nzVisible)]="editIsVisible"
+  [nzTitle]="editTitle"
+  nzCentered
+  [nzFooter]="null"
+  [nzContent]="editContent"
+  (nzOnCancel)="onToggleEdit(false)">
+  <ng-template #editTitle>账号修改</ng-template>
+  <ng-template #editContent>
+    <div class="input-item">
+      <div class="title">账号名称</div>
+      <input
+        nz-input
+        type="text"
+        class="text-center"
+        placeholder="请输入"
+        [(ngModel)]="editModalValue.name">
+    </div>
+    <div class="input-item">
+      <div class="title">交易所</div>
+      <p>{{editModalValue.exchange}}</p>
+    </div>
+    <div class="input-item">
+      <div class="title">API Key</div>
+      <p>{{editModalValue.APIKey}}</p>
+    </div>
+    <div class="input-item">
+      <div class="title">Secret Key</div>
+      <p>{{editModalValue.APISecret}}</p>
+    </div>
+    <div class="input-item">
+      <div class="title">邮箱</div>
+      <p>{{email}}</p>
+    </div>
+    <div class="next-step">
+      <button
+        [disabled]="createLoading"
+        (click)="onEdit()"
+        nz-button
+        nzType="primary">确定</button>
+    </div>
+  </ng-template>
+</nz-modal>
