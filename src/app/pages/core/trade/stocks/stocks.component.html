@@ -59,18 +59,36 @@
               主钱包资产
             </p>
             <div class="padding-bottom-10" nz-row *ngFor="let item of mainWallet">
-              <span nz-col [nzSpan]="12">{{item.symbol}}</span>
-              <span nz-col [nzSpan]="6">可用 {{item.available}}</span>
-              <span nz-col [nzSpan]="6">冻结 {{item.frozen}}</span>
+              <p class="wallet-text wallet-symbol" nz-col [nzSpan]="24">{{item.symbol}}</p>
+              <p class="wallet-text" nz-col [nzSpan]="24"><span class="wallet-desc">可用</span> {{item.available}}</p>
+              <p class="wallet-text" nz-col [nzSpan]="24"><span class="wallet-desc">冻结</span> {{item.frozen}}</p>
             </div>
             <div class="padding-top-10" nz-row>
-              <button class="action-btn action-btn-buy" nzType="primary" nz-col nz-button [nzSpan]="11">
+              <button
+                class="action-btn action-btn-buy"
+                nzType="primary"
+                nz-col
+                nz-button
+                [nzSpan]="11"
+                (click)="onManualOrder('buy')">
                 买入
               </button>
-              <button class="action-btn action-btn-sell" nzType="primary" nz-col nz-button [nzSpan]="11" [nzOffset]="2">
+              <button
+                class="action-btn action-btn-sell"
+                nzType="primary"
+                nz-col
+                nz-button
+                [nzSpan]="11"
+                [nzOffset]="2"
+                (click)="onManualOrder('sell')">
                 卖出
               </button>
             </div>
+          </div>
+          <div class="handle-form" *ngIf="actionType === 1">
+            <ng-container *ngIf="!toolType" [ngTemplateOutlet]="automaticList"></ng-container>
+            <ng-container *ngIf="toolType === 'sell' || toolType === 'buy'" [ngTemplateOutlet]="batch"></ng-container>
+            <ng-container *ngIf="toolType === 'back'" [ngTemplateOutlet]="back"></ng-container>
           </div>
         </div>
       </div>
@@ -181,3 +199,193 @@ nzCentered
   </div>
 </ng-template>
 </nz-modal>
+
+
+
+<ng-template #automaticList>
+  <div class="automatic-item" nz-row nzAlign="middle">
+    <div nz-col [nzSpan]="3" class="automatic-icon iconfont icon-piliangmairu"></div>
+    <div nz-col [nzSpan]="14" class="automatic-text">
+      <p class="automatic-title">批量下买单</p>
+      <p class="automatic-desc">帮助您在某个价格区间内批量买入订单</p>
+    </div>
+    <div nz-col [nzSpan]="7">
+      <button
+        class="automatic-btn"
+        nz-button
+        (click)="toolType = 'buy'">
+        进入
+      </button>
+    </div>
+  </div>
+  <div class="automatic-item" nz-row nzAlign="middle">
+    <div nz-col [nzSpan]="3" class="automatic-icon iconfont icon-piliangmaichu"></div>
+    <div nz-col [nzSpan]="14" class="automatic-text">
+      <p class="automatic-title">批量下卖单</p>
+      <p class="automatic-desc">帮助您在某个价格区间内批量卖出订单</p>
+    </div>
+    <div nz-col [nzSpan]="7">
+      <button
+        class="automatic-btn"
+        nz-button
+        (click)="toolType = 'sell'">
+        进入
+      </button>
+    </div>
+  </div>
+  <div class="automatic-item" nz-row nzAlign="middle">
+    <div nz-col [nzSpan]="3" class="automatic-icon iconfont icon-piliangchexiao"></div>
+    <div nz-col [nzSpan]="14" class="automatic-text">
+      <p class="automatic-title">批量撤单</p>
+      <p class="automatic-desc">帮助您在撤销某个价格区间内所有订单</p>
+    </div>
+    <div nz-col [nzSpan]="7">
+      <button
+        class="automatic-btn"
+        nz-button
+        (click)="toolType = 'back'">
+        进入
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #batch>
+  <div class="tool-top" nz-row nzAlign="middle">
+    <span nz-col [nzSpan]="3" *ngIf="toolType === 'buy'" class="iconfont icon-piliangmairu"></span>
+    <span nz-col [nzSpan]="3" *ngIf="toolType === 'sell'" class="iconfont icon-piliangmaichu"></span>
+    <span nz-col [nzFlex]="1">批量下{{toolType === 'buy' ? '买' : '卖'}}单</span>
+    <button
+      nz-button
+      nzType="text"
+      (click)="toolType = undefined">
+      <span class="iconfont icon-guanbi"></span>
+    </button>
+  </div>
+  <div class="tool-form">
+    <p class="tool-form-title">{{toolType === 'buy' ? '买' : '卖'}}单挂单价格范围</p>
+    <div class="tool-label" nz-row nzAlign="middle">
+      <input
+        nz-input
+        type="number"
+        placeholder="最小值"
+        nz-col
+        [nzSpan]="10"
+        [(ngModel)]="toolFormValue.priceMin" />
+      <span nz-col [nzSpan]="4">~</span>
+      <input
+        nz-input
+        type="number"
+        placeholder="最大值"
+        nz-col
+        [nzSpan]="10"
+        [(ngModel)]="toolFormValue.priceMax" />
+    </div>
+    <p class="tool-form-title">下单数量</p>
+    <div class="tool-label" nz-row nzAlign="middle">
+      <input
+        nz-input
+        type="number"
+        placeholder="最小值"
+        nz-col
+        [nzSpan]="10"
+        [(ngModel)]="toolFormValue.numberMin" />
+      <span nz-col [nzSpan]="4">~</span>
+      <input
+        nz-input
+        type="number"
+        placeholder="最大值"
+        nz-col
+        [nzSpan]="10"
+        [(ngModel)]="toolFormValue.numberMax" />
+    </div>
+    <p class="tool-form-title">总单数(最大500)</p>
+    <nz-input-number
+      [nzMin]="0"
+      [nzMax]="500"
+      class="tool-input"
+      type="number"
+      placeholder="最大500"
+      [(ngModel)]="toolFormValue.allOrder" />
+    <p class="tool-form-title">价格小数点位数(整数)</p>
+    <nz-input-number
+      [nzMin]="0"
+      [nzMax]="10"
+      class="tool-input"
+      type="number"
+      placeholder="整数"
+      [(ngModel)]="toolFormValue.decimal" />
+    <button
+      nz-button
+      nzType="primary"
+      [nzLoading]="toolFormValue.isLoading"
+      (click)="onBatchOrder()">
+      提交
+    </button>
+  </div>
+</ng-template>
+
+
+<ng-template #back>
+  <div class="tool-top" nz-row nzAlign="middle">
+    <span nz-col [nzSpan]="3" class="iconfont icon-piliangchexiao"></span>
+    <span nz-col [nzFlex]="1">批量撤单</span>
+    <button
+      nz-button
+      nzType="text"
+      (click)="toolType = undefined">
+      <span class="iconfont icon-guanbi"></span>
+    </button>
+  </div>
+  <div class="tool-form">
+    <p class="tool-form-title">价格范围</p>
+    <div class="tool-label" nz-row nzAlign="middle">
+      <input
+        nz-input
+        type="number"
+        placeholder="最小值"
+        nz-col
+        [nzSpan]="10"
+        [(ngModel)]="toolFormValue.priceMin" />
+      <span nz-col [nzSpan]="4">~</span>
+      <input
+        nz-input
+        type="number"
+        placeholder="最大值"
+        nz-col
+        [nzSpan]="10"
+        [(ngModel)]="toolFormValue.priceMax" />
+    </div>
+    <p class="tool-form-title">数量范围</p>
+    <div class="tool-label" nz-row nzAlign="middle">
+      <input
+        nz-input
+        type="number"
+        placeholder="最小值"
+        nz-col
+        [nzSpan]="10"
+        [(ngModel)]="toolFormValue.numberMin" />
+      <span nz-col [nzSpan]="4">~</span>
+      <input
+        nz-input
+        type="number"
+        placeholder="最大值"
+        nz-col
+        [nzSpan]="10"
+        [(ngModel)]="toolFormValue.numberMax" />
+    </div>
+    <p class="tool-form-title">主钱包资产</p>
+    <div class="padding-bottom-10" nz-row *ngFor="let item of mainWallet">
+      <p class="wallet-text wallet-symbol" nz-col [nzSpan]="24">{{item.symbol}}</p>
+      <p class="wallet-text" nz-col [nzSpan]="24"><span class="wallet-desc">可用</span> {{item.available}}</p>
+      <p class="wallet-text" nz-col [nzSpan]="24"><span class="wallet-desc">冻结</span> {{item.frozen}}</p>
+    </div>
+    <button
+      nz-button
+      nzType="primary"
+      [nzLoading]="toolFormValue.isLoading"
+      (click)="onBatchCancel()">
+      提交
+    </button>
+  </div>
+</ng-template>

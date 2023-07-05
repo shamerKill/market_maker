@@ -3,7 +3,7 @@
   <button (click)="createIsVisible = true" class="create-btn" nz-button nzType="primary">
     绑定新账号
   </button>
-  <div class="card-list" nz-row>
+  <div class="card-list" nz-row nzJustify="space-around">
     <div class="card-item" nz-col [nzSpan]="7" *ngFor="let item of accountList">
       <p class="card-title">{{item.name}}</p>
       <div class="card-content">

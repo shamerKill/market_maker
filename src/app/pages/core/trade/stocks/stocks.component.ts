@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { BehaviorSubject, zip } from 'rxjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { BehaviorSubject } from 'rxjs';
 import { HttpService } from 'src/app/services/http/http.service';
 import { toolNumberAdd, toolNumberCut } from 'src/app/tools/number';
 
@@ -36,7 +37,20 @@ export class StocksComponent implements OnInit, AfterViewInit {
     numberStep: '0.1'
   }
   // 主钱包资产
-  mainWallet: {[key in 'symbol'|'total'|'available'|'frozen']: string}[] = []
+  mainWallet: {[key in 'symbol'|'total'|'available'|'frozen']: string}[] = [
+  ]
+
+  // 量化工具表单
+  toolType?: 'sell'|'buy'|'back';
+  toolFormValue: {[key in 'priceMin'|'priceMax'|'numberMin'|'numberMax'|'allOrder'|'decimal']: string} & {isLoading: boolean} = {
+    priceMin: '',
+    priceMax: '',
+    numberMin: '',
+    numberMax: '',
+    allOrder: '',
+    decimal: '',
+    isLoading: false,
+  };
 
   // 当前盘口
   isSimpleBookList: boolean = true;
@@ -80,6 +94,7 @@ export class StocksComponent implements OnInit, AfterViewInit {
   constructor(
     private message: NzMessageService,
     private http: HttpService,
+    private modal: NzModalService,
   ) { }
 
   ngOnInit(): void {
@@ -189,13 +204,156 @@ export class StocksComponent implements OnInit, AfterViewInit {
 
   // 获取余额
   private _getWalletBalance() {
-    this.http.get('/handle/balance', {pairs: this.symbols.getValue().join('_'), exchange: this.platform?.mark||''}, {withToken: true})
+    this.http.get('/handle/balance', {pairs: this.symbols.getValue().join('_'), mark: this.platform?.mark||''}, {withToken: true})
       .subscribe(res => {
         if (res.errno !== 200) {
           this.message.error(res.errmsg);
           return;
         }
-        console.log(res);
+        if (res.data.length === 0) {
+          this.message.error('获取余额失败');
+          return;
+        }
+        this.mainWallet = res.data.map((item: any) => {
+          return {
+            symbol: item.name,
+            total: toolNumberAdd(item.balance, item.freeze),
+            available: item.balance,
+            frozen: item.freeze,
+          };
+        });
       });
+  }
+
+  // 手动下单
+  onManualOrder(type: string) {
+    // 获取价格
+    const price = this.manualOrder.price;
+    // 获取数量
+    const number = this.manualOrder.number;
+    const confirm = this.modal.confirm({
+      nzTitle: '确认下单',
+      nzContent: `价格：${price} <small>${this.symbols.getValue()[0]}/${this.symbols.getValue()[1]}</small> <br/> 数量：${number}`,
+      nzOnOk: () => {
+        confirm.updateConfig({nzOkLoading: true});
+        this.http.post('/handle/order', {
+          mark: this.platform?.mark,
+          pairs: this.symbols.getValue().join('_'),
+          side: type,
+          price,
+          num: number,
+        }, {withToken: true}).subscribe(res => {
+          if (res.errno !== 200) {
+            this.message.error(res.errmsg);
+            return;
+          }
+          this.message.success('下单成功');
+          this._getWalletBalance();
+          confirm.destroy();
+        });
+        return false;
+      },
+    });
+  }
+
+  // 批量下单
+  onBatchOrder() {
+    if (this.toolFormValue.isLoading) return;
+    if (parseFloat(this.toolFormValue.priceMax) - parseFloat(this.toolFormValue.priceMin) <= 0) {
+      this.message.warning('价格区间不正确');
+      return;
+    }
+    if (parseFloat(this.toolFormValue.numberMax) - parseFloat(this.toolFormValue.numberMin) <= 0) {
+      this.message.warning('数量区间不正确');
+      return;
+    }
+    if (!this.toolFormValue.allOrder) {
+      this.message.warning('总单数量错误');
+      return;
+    }
+    if (!this.toolFormValue.decimal) {
+      this.message.warning('价格精度错误');
+      return;
+    }
+    const confirm = this.modal.confirm({
+      nzTitle: '确认下' + (this.toolType === 'buy' ? '买' : '卖') + '单',
+      nzContent: `价格：${this.toolFormValue.priceMin} ~ ${this.toolFormValue.priceMax} <small>${this.symbols.getValue()[0]}/${this.symbols.getValue()[1]}</small> <br/> 数量：${this.toolFormValue.numberMin} ~ ${this.toolFormValue.numberMax} <br/> 总单数：${this.toolFormValue.allOrder}`,
+      nzOnOk: () => {
+        this.toolFormValue.isLoading = true;
+        confirm.updateConfig({nzOkLoading: true});
+        this.http.post('/handle/batch', {
+          pairs: this.symbols.getValue().join('_'),
+          mark: this.platform?.mark,
+          side: this.toolType,
+          min_price: this.toolFormValue.priceMin,
+          max_price: this.toolFormValue.priceMax,
+          min_num: this.toolFormValue.numberMin,
+          max_num: this.toolFormValue.numberMax,
+          count: this.toolFormValue.allOrder,
+          decimal: this.toolFormValue.decimal,
+        }, {withToken: true}).subscribe(res => {
+          this.toolFormValue.isLoading = false;
+          confirm.destroy();
+          if (res.errno !== 200) {
+            this.message.error(res.errmsg);
+            return;
+          }
+          this.message.success('下单成功');
+          this.toolFormValue.allOrder = '';
+          this.toolFormValue.decimal = '';
+          this.toolFormValue.priceMin = '';
+          this.toolFormValue.priceMax = '';
+          this.toolFormValue.numberMin = '';
+          this.toolFormValue.numberMax = '';
+          this._getWalletBalance();
+        });
+        return false;
+      }
+    });
+  }
+
+  // 批量撤单
+  onBatchCancel() {
+    if (this.toolFormValue.isLoading) return;
+    if (parseFloat(this.toolFormValue.priceMax) - parseFloat(this.toolFormValue.priceMin) <= 0) {
+      this.message.warning('价格区间不正确');
+      return;
+    }
+    if (parseFloat(this.toolFormValue.numberMax) - parseFloat(this.toolFormValue.numberMin) <= 0) {
+      this.message.warning('数量区间不正确');
+      return;
+    }
+    const confirm = this.modal.confirm({
+      nzTitle: '确认撤单',
+      nzContent: `价格：${this.toolFormValue.priceMin} ~ ${this.toolFormValue.priceMax} <small>${this.symbols.getValue()[0]}/${this.symbols.getValue()[1]}</small> <br/> 数量：${this.toolFormValue.numberMin} ~ ${this.toolFormValue.numberMax}`,
+      nzOnOk: () => {
+        this.toolFormValue.isLoading = true;
+        confirm.updateConfig({nzOkLoading: true});
+        this.http.post('/handle/batch_kill', {
+          pairs: this.symbols.getValue().join('_'),
+          mark: this.platform?.mark,
+          min_price: this.toolFormValue.priceMin,
+          max_price: this.toolFormValue.priceMax,
+          min_num: this.toolFormValue.numberMin,
+          max_num: this.toolFormValue.numberMax,
+        }, {withToken: true}).subscribe(res => {
+          this.toolFormValue.isLoading = false;
+          confirm.destroy();
+          if (res.errno !== 200) {
+            this.message.error(res.errmsg);
+            return;
+          }
+          this.message.success('撤单成功');
+          this.toolFormValue.allOrder = '';
+          this.toolFormValue.decimal = '';
+          this.toolFormValue.priceMin = '';
+          this.toolFormValue.priceMax = '';
+          this.toolFormValue.numberMin = '';
+          this.toolFormValue.numberMax = '';
+          this._getWalletBalance();
+        });
+        return false;
+      }
+    });
   }
 }
