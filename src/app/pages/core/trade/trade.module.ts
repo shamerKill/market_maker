@@ -13,6 +13,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 import { TradeRoutingModule } from './trade-routing.module';
 import { AlarmsComponent } from './alarms/alarms.component';
@@ -42,6 +43,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
     NzModalModule,
     NzSelectModule,
     NzRadioModule,
+    NzSpinModule,
     FormsModule,
     NzInputModule,
     NzTypographyModule,

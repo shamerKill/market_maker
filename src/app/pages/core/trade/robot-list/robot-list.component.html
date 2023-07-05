@@ -8,7 +8,6 @@
     </nz-breadcrumb>
   </div>
   <div class="robot-list">
-    <div class="robot-list-title">个人版</div>
     <div class="robot-list-info">
       <div class="robot-list-item" (click)="showModal('healing')">
         <img src="/assets/loginImg/robot1.png" alt="">
@@ -32,7 +31,7 @@
     [nzContent]="modalContent"
     (nzOnCancel)="handleCancel()"
   >
-    <ng-template #modalTitle>盘口管理机器人</ng-template>
+    <ng-template #modalTitle>{{bot == 'handle'?'盘口管理机器人':bot == 'healing'?'跟盘机器人':bot == 'kline'?'画线机器人':''}}</ng-template>
     <ng-template #modalContent>
       <div class="input-item">
         <div class="title">交易所</div>
@@ -69,7 +68,7 @@
       </div>
       <div class="input-item" *ngIf="bot == 'healing'">
         <div class="title">目标盘口</div>
-        <input nz-input placeholder="输入维护档位数" [(ngModel)]="modalInfo.target" />
+        <input nz-input placeholder="输入目标盘口" [(ngModel)]="modalInfo.target" />
       </div>
       <div class="input-item">
         <div class="title">盘口差价</div>
@@ -100,7 +99,7 @@
         <input nz-input placeholder="输入每日刷单总量" [(ngModel)]="modalInfo.day_count" />
       </div>
       <div class="next-step">
-        <button nz-button nzType="primary">保存并启动</button>
+        <button nz-button nzType="primary" (click)="saveNewBot()">保存并启动</button>
       </div>
     </ng-template>
   </nz-modal>
