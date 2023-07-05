@@ -37,13 +37,13 @@ export class HttpService {
   }
 
   get(url: string, data?: {[key: string]: string|number}|string, options?: { withToken?: boolean }) {
-    let params = options?.withToken ? '?token=' + this.token + '&' : '';
-    if (data !== undefined) params += '?';
+    let params = options?.withToken ? ('?token=' + this.token + '&') : '';
+    if (data !== undefined && !params) params += '?';
     if (typeof data === 'object') {
       for (let key in data) {
         params += key + '=' + data[key] + '&';
       }
-    } else {
+    } else if (data) {
       params += data;
     }
     return this.client.get<resType>(this.getUrl(url) + params).pipe(this.check_login);
@@ -55,7 +55,7 @@ export class HttpService {
       for (let key in data) {
         body.append(key, data[key]);
       }
-    } else {
+    } else if (data instanceof FormData) {
       body = data;
     }
     if (options?.withToken) body.append('token', this.token||'');

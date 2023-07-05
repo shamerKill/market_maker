@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, zip } from 'rxjs';
 import { HttpService } from 'src/app/services/http/http.service';
 import { toolNumberAdd, toolNumberCut } from 'src/app/tools/number';
 
@@ -36,10 +36,7 @@ export class StocksComponent implements OnInit, AfterViewInit {
     numberStep: '0.1'
   }
   // 主钱包资产
-  mainWallet: {[key in 'symbol'|'total'|'available'|'frozen']: string}[] = [
-    { symbol: 'BTC', total: '0', available: '0', frozen: '0' },
-    { symbol: 'USDT', total: '0', available: '0', frozen: '0' },
-  ]
+  mainWallet: {[key in 'symbol'|'total'|'available'|'frozen']: string}[] = []
 
   // 当前盘口
   isSimpleBookList: boolean = true;
@@ -92,6 +89,7 @@ export class StocksComponent implements OnInit, AfterViewInit {
       this.selectModalValue.platformValue = this.platform?.mark || '';
       this.selectModalValue.symbolOneValue = this.symbols.getValue()[0] || '';
       this.selectModalValue.symbolTwoValue = this.symbols.getValue()[1] || '';
+      this._onWatchPair();
     } catch {}
     // 如果没有盘口，选择盘口
     if (this.symbols.getValue().length === 0) {
@@ -173,6 +171,7 @@ export class StocksComponent implements OnInit, AfterViewInit {
     this._onWatchPair();
   }
 
+  // 检测币种更改
   private _onWatchPair() {
     window.localStorage.setItem('maker_platform', JSON.stringify(this.platform));
     window.localStorage.setItem('maker_symbols', JSON.stringify(this.symbols.getValue()));
@@ -185,5 +184,18 @@ export class StocksComponent implements OnInit, AfterViewInit {
     } else {
       this.isCollected = false;
     }
+    this._getWalletBalance();
+  }
+
+  // 获取余额
+  private _getWalletBalance() {
+    this.http.get('/handle/balance', {pairs: this.symbols.getValue().join('_'), exchange: this.platform?.mark||''}, {withToken: true})
+      .subscribe(res => {
+        if (res.errno !== 200) {
+          this.message.error(res.errmsg);
+          return;
+        }
+        console.log(res);
+      });
   }
 }
