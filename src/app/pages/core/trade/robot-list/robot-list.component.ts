@@ -43,12 +43,38 @@ export class RobotListComponent {
     this.isVisible = false;
   }
   getInfo() {
-    this.http.get('/exchange').subscribe(res => {
+    this.http.get('/exchange',{},{withToken:false}).subscribe(res => {
       if (res.errno !== 200) {
         this.message.error(res.errmsg);
         return;
       }
       this.exchangeList = res.data;
     });
+  }
+  saveNewBot() {
+    let reqObj;
+    reqObj = {
+      pairs: this.modalInfo.tokenA+'_'+this.modalInfo.tokenB,
+      exchange: this.modalInfo.exchange,
+      gear_count: this.modalInfo.gear_count,
+      limit_max: this.modalInfo.limit_max,
+      limit_min: this.modalInfo.limit_min,
+      mode: this.modalInfo.mode,
+      target: this.modalInfo.target,
+      handle_difference: this.modalInfo.handle_difference,
+      gear_difference: this.modalInfo.gear_difference,
+      buy_num: this.modalInfo.buy_num,
+      sell_num: this.modalInfo.sell_num,
+      max_num: this.modalInfo.max_num,
+      decimal: this.modalInfo.decimal,
+      day_count: this.modalInfo.day_count,
+      bot: this.bot,
+    };
+    this.http.post('/bot/add', reqObj,{withToken: true}).subscribe(res => {
+      if (res.errno !== 200) {
+        this.message.error(res.errmsg);
+        return;
+      }
+    })
   }
 }

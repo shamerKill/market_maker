@@ -16,7 +16,7 @@ type resType = {
 })
 export class HttpService {
   private protocol = 'http';
-  private host = '192.168.3.174:8553';
+  private host = '47.243.255.151:8553';
   private token: string | null = null;
   private getUrl(url: string) {
     let result = this.host + '/' + url;
