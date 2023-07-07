@@ -50,8 +50,8 @@
     &-item{
       display: flex;
       align-items: center;
-      height: 50px;
-      padding: 0 20px;
+      padding: 15px 20px;
+      flex-wrap: wrap;
       .time{
         color: #9197b1;
         font-size: 16px;
@@ -60,10 +60,18 @@
       .info{
         font-size: 16px;
         color: #eaeaea;
+        padding-right: 20px;
       }
       &:nth-child(2n) {
         background: #272f48;
       }
     }
+  }
+
+  &-pages{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

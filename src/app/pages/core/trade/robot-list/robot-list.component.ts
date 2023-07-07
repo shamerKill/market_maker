@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpService } from 'src/app/services/http/http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
@@ -10,6 +11,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 export class RobotListComponent {
   constructor(
     private http: HttpService,
+    private router: Router,
     private message: NzMessageService
   ) {
     this.getInfo();
@@ -21,12 +23,12 @@ export class RobotListComponent {
   modalInfo = {
     tokenA: '',
     tokenB: '',
-    exchange: 'lbank2', // 交易所mark
+    mark: 'lbank2', // 交易所mark
+    target: 'mexc', // 目标交易所mark
     gear_count: '', // 维护档位数(盘口必填参数)
     limit_max: '', // 区间上限(画线必填参数)
     limit_min: '', // 区间下限(画线必填参数)
     mode: '标准', // 模式(跟盘必填参数)
-    target: '', // 目标盘口(跟盘必填参数)
     handle_difference: '', // 盘口差价(跟盘、画线、盘口必填参数)
     gear_difference: '', // 每档差价(跟盘、画线、盘口必填参数)
     buy_num: '', // 买盘每档数量(跟盘、画线、盘口必填参数)
@@ -55,7 +57,7 @@ export class RobotListComponent {
     let reqObj;
     reqObj = {
       pairs: this.modalInfo.tokenA+'_'+this.modalInfo.tokenB,
-      exchange: this.modalInfo.exchange,
+      mark: this.modalInfo.mark,
       gear_count: this.modalInfo.gear_count,
       limit_max: this.modalInfo.limit_max,
       limit_min: this.modalInfo.limit_min,
@@ -75,6 +77,8 @@ export class RobotListComponent {
         this.message.error(res.errmsg);
         return;
       }
+      this.isVisible = false;
+      this.router.navigate(['/core/trade/robots']);
     })
   }
 }
