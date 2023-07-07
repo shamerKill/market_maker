@@ -6,6 +6,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { LogsRoutingModule } from './logs-routing.module';
 import { DataChartComponent } from './data-chart/data-chart.component';
 import { PropertyComponent } from './property/property.component';
@@ -23,6 +24,7 @@ import { RobotLogsComponent } from './robot-logs/robot-logs.component';
     NzDatePickerModule,
     NzInputModule,
     NzButtonModule,
+    NzPaginationModule,
     FormsModule,
     CommonModule,
     NzSelectModule,

@@ -35,18 +35,32 @@
     <ng-template #modalContent>
       <div class="input-item">
         <div class="title">交易所</div>
-        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择交易所" [(ngModel)]="modalInfo.exchange">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择交易所" [(ngModel)]="modalInfo.mark">
           <nz-option *ngFor="let item of exchangeList" [nzLabel]="item.name" [nzValue]="item.mark"></nz-option>
         </nz-select>
       </div>
       <div class="input-item">
         <div class="title">交易对</div>
         <div class="select-item">
-          <input nz-input placeholder="币种A" [(ngModel)]="modalInfo.tokenA" />
+          <input nz-input placeholder="币种" [(ngModel)]="modalInfo.tokenA" />
           <span>-</span>
-          <input nz-input placeholder="币种B" [(ngModel)]="modalInfo.tokenB" />
+          <input nz-input placeholder="币种" [(ngModel)]="modalInfo.tokenB" />
         </div>
       </div>
+      <div class="input-item" *ngIf="bot == 'healing'">
+        <div class="title">目标盘口</div>
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择目标交易所" [(ngModel)]="modalInfo.target">
+          <nz-option *ngFor="let item of exchangeList" [nzLabel]="item.name" [nzValue]="item.mark"></nz-option>
+        </nz-select>
+      </div>
+      <!-- <div class="input-item" *ngIf="bot == 'healing'">
+        <div class="title">目标盘口</div>
+        <div class="select-item">
+          <input nz-input placeholder="币种" [(ngModel)]="modalInfo.tokenA1" />
+          <span>-</span>
+          <input nz-input placeholder="币种" [(ngModel)]="modalInfo.tokenB1" />
+        </div>
+      </div> -->
       <div class="input-item" *ngIf="bot == 'handle'">
         <div class="title">维护档位数</div>
         <input nz-input placeholder="输入维护档位数" [(ngModel)]="modalInfo.gear_count" />
@@ -65,10 +79,6 @@
           <label nz-radio-button nzValue="标准">标准模式</label>
           <label nz-radio-button nzValue="对冲">对冲模式</label>
         </nz-radio-group>
-      </div>
-      <div class="input-item" *ngIf="bot == 'healing'">
-        <div class="title">目标盘口</div>
-        <input nz-input placeholder="输入目标盘口" [(ngModel)]="modalInfo.target" />
       </div>
       <div class="input-item">
         <div class="title">盘口差价</div>

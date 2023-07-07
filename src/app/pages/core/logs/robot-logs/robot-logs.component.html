@@ -10,58 +10,41 @@
     <div class="flex">
       <div class="robots-log-search-item">
         <div class="titles">选择日期</div>
-        <nz-range-picker [(ngModel)]="date" nzFormat="yyyy/MM/dd" (ngModelChange)="onChange($event)"></nz-range-picker>
+        <nz-range-picker [(ngModel)]="dateArr" nzFormat="yyyy/MM/dd"></nz-range-picker>
       </div>
       <div class="robots-log-search-item">
         <div class="titles">交易所</div>
-        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择交易所" [(ngModel)]="selectedValue">
-          <nz-option nzLabel="lBank" nzValue="lbank"></nz-option>
-          <nz-option nzLabel="hotbit" nzValue="hotbit"></nz-option>
-          <nz-option nzLabel="Binance" nzValue="binance"></nz-option>
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择交易所" [(ngModel)]="exchangeMark">
+          <nz-option *ngFor="let item of exchangeList" [nzLabel]="item.name" [nzValue]="item.mark"></nz-option>
         </nz-select>
       </div>
       <div class="robots-log-search-item">
         <div class="titles">交易对</div>
         <div class="select-item">
-          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择币种1" [(ngModel)]="selectedValue">
-            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
-            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
-            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
-          </nz-select>
+          <input nz-input placeholder="币种" [(ngModel)]="tokenA" />
           <span>-</span>
-          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择币种2" [(ngModel)]="selectedValue">
-            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
-            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
-            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
-          </nz-select>
+          <input nz-input placeholder="币种" [(ngModel)]="tokenB" />
         </div>
       </div>
       <div class="flex">
-        <input nz-input placeholder="搜索关键字" [(ngModel)]="value" />
-        <button nz-button nzType="primary">查询</button>
+        <input nz-input placeholder="搜索关键字" [(ngModel)]="keyInfo" />
+        <button nz-button nzType="primary" (click)="getList()">查询</button>
       </div>
     </div>
   </div>
   <div class="robots-log-list">
-    <div class="robots-log-list-item">
-      <div class="time">2023-06-13 07:33:01</div>
-      <div class="info">[用户登录] 登录IP：182.122.67.86</div>
+    <div class="robots-log-list-item" *ngFor="let item of logList">
+      <div class="time">{{item.time}}</div>
+      <div class="info">
+        <div *ngFor="let exchange of exchangeList">
+          <span *ngIf="exchange.mark == item.web"> {{exchange.name}} </span>
+        </div>
+      </div>
+      <div class="info">{{item.currency}}</div>
+      <div class="info">{{item.content}}</div>
     </div>
-    <div class="robots-log-list-item">
-      <div class="time">2023-06-13 07:33:01</div>
-      <div class="info">[用户登录] 登录IP：182.122.67.86</div>
-    </div>
-    <div class="robots-log-list-item">
-      <div class="time">2023-06-13 07:33:01</div>
-      <div class="info">[用户登录] 登录IP：182.122.67.86</div>
-    </div>
-    <div class="robots-log-list-item">
-      <div class="time">2023-06-13 07:33:01</div>
-      <div class="info">[用户登录] 登录IP：182.122.67.86</div>
-    </div>
-    <div class="robots-log-list-item">
-      <div class="time">2023-06-13 07:33:01</div>
-      <div class="info">[用户登录] 登录IP：182.122.67.86</div>
-    </div>
+  </div>
+  <div class="robots-log-pages">
+    <nz-pagination [nzPageIndex]="pageIndex" [nzTotal]="total" nzShowSizeChanger nzHideOnSinglePage [nzPageSize]="pageSize" [nzPageSizeOptions]="[10, 20, 50, 100]" (nzPageIndexChange)="getIndexChange($event)" (nzPageSizeChange)="getSizeChange($event)"></nz-pagination>
   </div>
 </div>

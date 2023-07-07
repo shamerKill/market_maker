@@ -103,6 +103,7 @@
             color: #9197b1;
             margin-left: 15px;
             cursor: pointer;
+            user-select: none;
             &.active{
               color: #65dc8f;
               border: 1px solid #65dc8f;
@@ -153,4 +154,7 @@
   display: flex;
   justify-content: center;
   margin-top: 40px;
+  button{
+    width: 150px;
+  }
 }

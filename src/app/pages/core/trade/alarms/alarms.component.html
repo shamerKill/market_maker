@@ -10,22 +10,28 @@
     <button nz-button nzType="primary" (click)="showModal()">新建报警器</button>
   </div>
   <div class="alarms-content-list">
-    <div class="alarms-content-list-item">
-      <div class="title">报警器1</div>
+    <div class="alarms-content-list-item" *ngFor="let item of alarmList">
+      <div class="title">报警器
+        <div style="padding: 0 5px;" *ngFor="let exchange of exchangeList">
+          <span *ngIf="exchange.mark == item.exchange"> {{exchange.name}}</span>
+        </div>
+        {{item.pair}}
+      </div>
       <div class="info">
-        <div class="info-item">价格高于 <span class="num">0</span>  ｜ 低于 <span class="num">0</span></div>
-        <div class="info-item">低于 <span class="num">0BTC</span>  ｜ 低于 <span class="num">0USDT</span></div>
-        <div class="info-item">价格突变幅度 <span class="num">10%</span></div>
+        <div class="info-item">{{item.paramer}}</div>
+        <div class="info-item">当前状态：{{item.state?'运行中':'已停止'}}</div>
         <div class="info-bottom">
-          <!-- <div class="tips">盘口出现套利机器人</div> -->
           <div class="btns">
-            <div class="delete close">停止</div>
-            <div class="delete active">启用</div>
-            <div class="delete">删除</div>
+            <div class="delete close" (click)="changeState(item.state,item.mark)">{{item.state?'停止':'启动'}}</div>
+            <div class="delete active" (click)="editRobot(item)">编辑</div>
+            <div class="delete" (click)="deleteConfirm(item.mark)">删除</div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+  <div class="alarms-content-loading" *ngIf="isLoading">
+    <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
   </div>
   <nz-modal
     [(nzVisible)]="isVisible"
@@ -39,59 +45,76 @@
     <ng-template #modalContent>
       <div class="input-item">
         <div class="title">交易所</div>
-        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择交易所" [(ngModel)]="selected">
-          <nz-option nzLabel="lBank" nzValue="lBank"></nz-option>
-          <nz-option nzLabel="hotbit" nzValue="hotbit"></nz-option>
-          <nz-option nzLabel="Binance" nzValue="Binance"></nz-option>
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择交易所" [(ngModel)]="modalInfo.exchange">
+          <nz-option *ngFor="let item of exchangeList" [nzLabel]="item.name" [nzValue]="item.mark"></nz-option>
         </nz-select>
       </div>
       <div class="input-item">
         <div class="title">交易对</div>
         <div class="select-item">
-          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择币种1" [(ngModel)]="selectedValue">
-            <nz-option nzLabel="PC" nzValue="PC"></nz-option>
-            <nz-option nzLabel="BTC" nzValue="BTC"></nz-option>
-            <nz-option nzLabel="ETH" nzValue="ETH"></nz-option>
-            <nz-option nzLabel="TRX" nzValue="TRX"></nz-option>
-          </nz-select>
+          <input nz-input placeholder="币种A" [(ngModel)]="modalInfo.tokenA" />
           <span>-</span>
-          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择币种2" [(ngModel)]="selectedValue1">
-            <nz-option nzLabel="USDT" nzValue="USDT"></nz-option>
-            <nz-option nzLabel="BNB" nzValue="BNB"></nz-option>
-            <nz-option nzLabel="BUSD" nzValue="BUSD"></nz-option>
-          </nz-select>
+          <input nz-input placeholder="币种B" [(ngModel)]="modalInfo.tokenB" />
         </div>
       </div>
       <div class="input-item">
         <div class="title">价格高于</div>
-        <input nz-input placeholder="输入价格高于" [(ngModel)]="value" />
+        <input nz-input placeholder="输入价格高于" [(ngModel)]="modalInfo.max_price" />
       </div>
       <div class="input-item">
         <div class="title">价格低于</div>
-        <input nz-input placeholder="输入价格低于" [(ngModel)]="value" />
+        <input nz-input placeholder="输入价格低于" [(ngModel)]="modalInfo.min_price" />
       </div>
       <div class="input-item">
-        <div class="title">{{selectedValue}}少于</div>
-        <input nz-input placeholder="请输入" [(ngModel)]="value" />
+        <div class="title">{{modalInfo.tokenA}}少于</div>
+        <input nz-input placeholder="请输入" [(ngModel)]="modalInfo.min_token1" />
       </div>
       <div class="input-item">
-        <div class="title">{{selectedValue1}}少于</div>
-        <input nz-input placeholder="请输入" [(ngModel)]="value" />
+        <div class="title">{{modalInfo.tokenB}}少于</div>
+        <input nz-input placeholder="请输入" [(ngModel)]="modalInfo.min_token2" />
       </div>
       <div class="input-item">
         <div class="title">价格突变幅度</div>
-        <input nz-input placeholder="价格突变幅度" [(ngModel)]="value" />
+        <input nz-input placeholder="价格突变幅度" [(ngModel)]="modalInfo.price_change" />
       </div>
-      <!-- <div class="input-item">
-        <div class="title">出现机器人</div>
-        <nz-radio-group [(ngModel)]="radioValue">
-          <label nz-radio nzValue="A">是</label>
-          <label nz-radio nzValue="B">否</label>
-        </nz-radio-group>
-      </div> -->
       <div class="next-step1">
-        <button nz-button nzType="default">保存</button>
         <button nz-button nzType="primary" (click)="submitStart()">保存并启动</button>
+      </div>
+    </ng-template>
+  </nz-modal>
+
+  <nz-modal
+    [(nzVisible)]="showEdit"
+    [nzTitle]="modalEditTitle"
+    nzCentered
+    [nzFooter]="null"
+    [nzContent]="modalEdit"
+    (nzOnCancel)="handleCancel1()"
+  >
+    <ng-template #modalEditTitle>编辑触发报警器</ng-template>
+    <ng-template #modalEdit>
+      <div class="input-item">
+        <div class="title">价格高于</div>
+        <input nz-input placeholder="输入价格高于" [(ngModel)]="modalInfo1.max_price" />
+      </div>
+      <div class="input-item">
+        <div class="title">价格低于</div>
+        <input nz-input placeholder="输入价格低于" [(ngModel)]="modalInfo1.min_price" />
+      </div>
+      <div class="input-item">
+        <div class="title">{{modalInfo1.tokenA}}少于</div>
+        <input nz-input placeholder="请输入" [(ngModel)]="modalInfo1.min_token1" />
+      </div>
+      <div class="input-item">
+        <div class="title">{{modalInfo1.tokenB}}少于</div>
+        <input nz-input placeholder="请输入" [(ngModel)]="modalInfo1.min_token2" />
+      </div>
+      <div class="input-item">
+        <div class="title">价格突变幅度</div>
+        <input nz-input placeholder="价格突变幅度" [(ngModel)]="modalInfo1.price_change" />
+      </div>
+      <div class="next-step1">
+        <button nz-button nzType="primary" (click)="submitEdit()">保存</button>
       </div>
     </ng-template>
   </nz-modal>

@@ -14,8 +14,14 @@
     <div *ngFor="let items of robotList">
       <div class="robots-work-content-list" *ngFor="let item of items.coin">
         <div class="robots-work-content-list-item" *ngFor="let robotItem of item.robot">
-          <div class="title">{{items.name}} {{item.name}}</div>
+          <div class="title">
+            <div style="padding-right: 5px;" *ngFor="let exchange of exchangeList">
+              <span *ngIf="exchange.mark == items.name"> {{exchange.name}} </span>
+            </div>
+            <div>{{item.name}}</div>
+          </div>
           <div class="info">
+            <div class="info-item num">{{robotItem.type==1?'盘口机器人':robotItem.type==2?'画线机器人':robotItem.type==3?'跟盘机器人':''}}_{{robotItem.mark}}</div>
             <div class="info-item">{{robotItem.paramer}}</div>
             <div class="info-item">当前状态：{{robotItem.state?'运行中':'已停止'}}</div>
             <div class="info-bottom">
@@ -40,14 +46,14 @@
   </div>
   <nz-modal
     [(nzVisible)]="isVisible1"
-    [nzTitle]="modalTitle"
+    [nzTitle]="modalTitle1"
     nzCentered
     [nzFooter]="null"
-    [nzContent]="modalContent"
+    [nzContent]="modalContent1"
     (nzOnCancel)="handleCancel1()"
   >
-    <ng-template #modalTitle>编辑盘口管理机器人</ng-template>
-    <ng-template #modalContent>
+    <ng-template #modalTitle1>编辑盘口机器人</ng-template>
+    <ng-template #modalContent1>
       <div class="input-item">
         <div class="title">买盘每档数量</div>
         <input nz-input placeholder="输入买盘每档数量" [(ngModel)]="modalInfo1.buy_num" />
@@ -73,20 +79,20 @@
         <input nz-input placeholder="输入维护档位数" [(ngModel)]="modalInfo1.gear_count" />
       </div>
       <div class="next-step">
-        <button nz-button nzType="primary">保存</button>
+        <button nz-button nzType="primary" (click)="submitEdit()">保存</button>
       </div>
     </ng-template>
   </nz-modal>
   <nz-modal
     [(nzVisible)]="isVisible2"
-    [nzTitle]="modalTitle"
+    [nzTitle]="modalTitle2"
     nzCentered
     [nzFooter]="null"
-    [nzContent]="modalContent"
+    [nzContent]="modalContent2"
     (nzOnCancel)="handleCancel2()"
   >
-    <ng-template #modalTitle>编辑画线机器人</ng-template>
-    <ng-template #modalContent>
+    <ng-template #modalTitle2>编辑画线机器人</ng-template>
+    <ng-template #modalContent2>
       <div class="input-item">
         <div class="title">价格范围</div>
         <div class="select-item">
@@ -124,20 +130,20 @@
         <input nz-input placeholder="输入每日刷单总量" [(ngModel)]="modalInfo2.day_count" />
       </div>
       <div class="next-step">
-        <button nz-button nzType="primary">保存</button>
+        <button nz-button nzType="primary" (click)="submitEdit()">保存</button>
       </div>
     </ng-template>
   </nz-modal>
   <nz-modal
     [(nzVisible)]="isVisible3"
-    [nzTitle]="modalTitle"
+    [nzTitle]="modalTitle3"
     nzCentered
     [nzFooter]="null"
-    [nzContent]="modalContent"
+    [nzContent]="modalContent3"
     (nzOnCancel)="handleCancel3()"
   >
-    <ng-template #modalTitle>编辑跟盘机器人</ng-template>
-    <ng-template #modalContent>
+    <ng-template #modalTitle3>编辑跟盘机器人</ng-template>
+    <ng-template #modalContent3>
       <div class="input-item">
         <div class="title">模式</div>
         <nz-radio-group [(ngModel)]="modalInfo3.mode" nzButtonStyle="solid">
@@ -147,7 +153,9 @@
       </div>
       <div class="input-item">
         <div class="title">目标盘口</div>
-        <input nz-input placeholder="输入目标盘口" [(ngModel)]="modalInfo3.target" />
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择目标交易所" [(ngModel)]="modalInfo3.target">
+          <nz-option *ngFor="let item of exchangeList" [nzLabel]="item.name" [nzValue]="item.mark"></nz-option>
+        </nz-select>
       </div>
       <div class="input-item">
         <div class="title">盘口差价</div>
@@ -178,7 +186,7 @@
         <input nz-input placeholder="输入每日刷单总量" [(ngModel)]="modalInfo3.day_count" />
       </div>
       <div class="next-step">
-        <button nz-button nzType="primary">保存</button>
+        <button nz-button nzType="primary" (click)="submitEdit()">保存</button>
       </div>
     </ng-template>
   </nz-modal>
