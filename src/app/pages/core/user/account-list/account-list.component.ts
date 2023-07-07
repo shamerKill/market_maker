@@ -114,8 +114,8 @@ export class AccountListComponent implements OnInit {
         name: this.createModalValue.name,
         accountID: res.data.accountID,
         exchange: this.exchangeList.find(item => item.mark === this.createModalValue.exchange)?.name||'',
-        APIKey: this.createModalValue.APIKey,
-        APISecret: this.createModalValue.APISecret,
+        APIKey: this.createModalValue.APIKey.slice(0, 6),
+        APISecret: '*********',
       });
       this.createModalValue.name = '';
       this.createModalValue.APIKey = '';

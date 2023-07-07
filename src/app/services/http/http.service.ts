@@ -26,6 +26,7 @@ export class HttpService {
     this.token = window.localStorage.getItem('market_token');
   }
   private token_set(token: string) {
+    this.token = token;
     window.localStorage.setItem('market_token', token);
   }
 

@@ -22,6 +22,7 @@ import { RobotListComponent } from './robot-list/robot-list.component';
 import { StocksComponent } from './stocks/stocks.component';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 
 
 @NgModule({
@@ -50,6 +51,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
     NzCheckboxModule,
     TradeRoutingModule,
     ComponentsModule,
+    NzInputNumberModule,
   ]
 })
 export class TradeModule { }

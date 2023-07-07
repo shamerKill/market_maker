@@ -190,6 +190,18 @@ $box-bg: linear-gradient(to bottom, rgba($attach-bg-color, 1),rgba($attach-bg-co
   align-items: center;
 }
 
+.wallet-symbol {
+  font-size: 0.9rem;
+  color: var(--primary-color);
+}
+.wallet-text {
+  margin: 0;
+  overflow-x: auto;
+}
+.wallet-desc {
+  opacity: 0.8;
+  font-size: 0.8rem;
+}
 
 
 .input-item{
@@ -226,4 +238,73 @@ $box-bg: linear-gradient(to bottom, rgba($attach-bg-color, 1),rgba($attach-bg-co
   display: flex;
   justify-content: center;
   margin-top: 40px;
+}
+
+
+.automatic-item {
+  border-bottom: 2px solid var(--main-bg-color);
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+}
+.automatic-icon {
+  font-size: 1.2rem;
+  opacity: 0.3;
+}
+.automatic-title {
+  margin-bottom: 0;
+}
+.automatic-desc {
+  font-size: 0.6rem;
+  opacity: 0.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  margin-bottom: 0;
+}
+.automatic-btn {
+  width: 100%;
+  padding: 0;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  text-align: center;
+  color: var(--primary-color);
+}
+
+
+.tool-top {
+  background-color: var(--main-bg-color);
+  margin: 0 -1rem;
+  padding: 0.5rem 1rem;
+  &>.iconfont {
+    color: var(--primary-color);
+  }
+  &>button {
+    opacity: 0.6;
+    &>.iconfont {
+      font-size: 0.8rem;
+    }
+  }
+}
+.tool-form {
+  .tool-form-title {
+    margin-bottom: 0.3rem;
+    margin-top: 1rem;
+    opacity: 0.6;
+    font-size: 0.8rem;
+  }
+  .tool-input {
+    width: 100%;
+  }
+  .tool-label {
+    span {
+      text-align: center;
+      opacity: 0.6;
+    }
+  }
+  button {
+    width: 100%;
+    margin-top: 1rem;
+    border-radius: 0.5rem;
+  }
 }
