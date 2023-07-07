@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
+import { environment } from 'src/environments/environments';
 
 
 type resType = {
@@ -15,15 +16,16 @@ type resType = {
   providedIn: 'root'
 })
 export class HttpService {
-  private protocol = 'http';
-  private host = '47.243.255.151:8553';
+  private protocol = environment.httpProtocol;
+  private host = environment.httpHost;
   private token: string | null = null;
   private getUrl(url: string) {
     let result = this.host + '/' + url;
     return this.protocol + '://' + result.replace(/\/+/g, '/');
   }
-  private token_get() {
+  public token_get() {
     this.token = window.localStorage.getItem('market_token');
+    return this.token;
   }
   private token_set(token: string) {
     this.token = token;

@@ -1,0 +1,332 @@
+// Copyright 2015 gRPC authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+option go_package = "./protos" ;
+
+package protos;
+
+// 查询服务
+service Fetch {
+  //通过websocket获取k线数据
+  rpc KlineWs(stream KlineWsRequest) returns (stream KlineWsResponse) {}
+  // // 获取是否支持交易对
+  // rpc Symbol(SymbolRequest) returns (SymbolResponse) {}
+  // // 获取支持的交易所
+  // rpc Exchanges (ExchangesRequest) returns (ExchangesResponse) {}
+  // // 查询交易
+  // rpc Trades (TradesRequest) returns (TradesResponse) {}
+  // // 查询我的交易
+  // rpc MyTrades (TradesRequest) returns (TradesResponse) {}
+  // // 查询余额
+  // rpc Balance (BalanceRequest) returns ( BalanceResponse) {}
+  // //查询全部委托单
+  // rpc Orders (OrdersRequest) returns (OrdersResponse) {}
+  // //查询指定id的委托单
+  // rpc Order (OrderRequest) returns (OrderResponse){}
+  // //查询全部敞口委托单
+  // rpc OpenOrders (OrdersRequest) returns (OrdersResponse) {}
+  // //查询全部已完结委托单
+  // rpc ClosedOrders (OrdersRequest) returns (OrdersResponse) {}
+
+  // //查询单个行情数据
+  // rpc Ticker (TickerRequest) returns (TickerResponse) {}
+  // //查询多个行情数据
+  // rpc Tickers (TickersRequest) returns  ( TickersResponse) {}
+
+  //查询k线数据
+  rpc Kline (KlineRequest) returns (KlineResponse) {}
+
+
+  // //查询市场深度
+  // rpc OrderBook(OrderBookRequest) returns (OrderBookResponse) {}
+
+  // //通过websocket查询订单状态变更
+  // rpc OrderWs(stream OrderRequest) returns (stream OrderResponse){}
+
+  // //通过websocket查询市场深度
+  // rpc OrderBookWs(stream OrderBookRequest) returns (stream OrderBookResponse) {}
+}
+
+// service Operate {
+//   //市场价委托订单
+//   rpc CreateMarketOrder(MarketOrderRequest) returns (OrderResponse) {}
+//   //限价委托订单
+//   rpc CreateLimitOrder(LimitOrderRequest) returns (OrderResponse) {}
+//   //取消委托订单
+//   rpc CancelOrder(OrderRequest) returns (OrderResponse) {}
+//   //取消多个订单
+//   rpc CancelOrders(CancelOrdersRequest) returns (OrdersResponse){}
+//   //取消全部订单
+//   rpc CancelAllOrders(CancelAllOrdersRequest) returns (OrdersResponse) {}
+// }
+
+// message SymbolRequest {
+//   string exchange = 1;
+//   Key key = 2;
+//   string symbol = 3;
+// }
+
+// message SymbolResponse {
+//   string status = 1;
+// }
+
+message Key{
+  string apiKey = 1;
+  string secret = 2;
+}
+
+message KlineWsRequest{
+  string exchange = 1;
+  Key key = 2;
+  string symbol = 3;//交易对符号
+  string timeframe = 4; //1m,5m,1h
+}
+
+message KlineWsResponse {
+  Kline kline = 1; //k线数据
+  string symbol = 2; //交易对
+  int64 timestamp = 3; //事件时间
+  string timeframe = 4; //k线间隔
+}
+
+message KlineRequest{
+  string exchange = 1;
+  Key key = 2;
+  string symbol = 3;//交易对符号
+  string timeframe = 4; //1m,5m,1h
+  int64 since = 5; //起始时间戳
+  int64 limit = 6; //条数
+}
+
+message KlineResponse{
+  repeated Kline klines = 1;
+}
+
+message Kline{
+  int64 timestamp = 1;// UTC 时间戳，单位：毫秒
+  float open = 2;// (O)开盘价格, float
+  float hight = 3;// (H)最高价格, float
+  float low = 4;// (L)最低价格, float
+  float close = 5;// (C)收盘价格, float
+  float value = 6;// (V)交易量，以基准货币计量， float
+}
+
+// message Book {
+//   double price = 1;  // 订单价格
+//   double amount = 2;  // 订单数量
+// }
+
+// message OrderBookResponse{
+//   string symbol = 1;  // 交易对符号
+//   repeated Book bids = 2;  // 买单列表
+//   repeated Book asks = 3;  // 卖单列表
+//   int64 timestamp = 4;            // Unix时间戳（毫秒级）
+//   string datetime = 5;            // 格式化后的时间戳
+//   string error = 6;
+// }
+
+// message OrderBookRequest{
+//   string exchange = 1;
+//   Key key = 2;
+//   string symbol = 3; //交易对
+//   int64 limit = 4;  //返回订单数量
+// }
+
+// message TickersRequest {
+//   string exchange = 1;
+//   Key key = 2;
+//   repeated string symbol = 3;
+// }
+
+// message TickersResponse {
+//   repeated Ticker tickers = 1;
+// }
+
+// message TickerRequest {
+//   string exchange = 1;
+//   Key key = 2;
+//   string symbol = 3;
+// }
+
+// message TickerResponse{
+//   Ticker ticker = 1;
+// }
+
+// //行情数据
+// message Ticker {
+//   string symbol = 1;               // 交易对的符号或代码
+//   int64 timestamp = 2;            // Unix时间戳（毫秒级）
+//   string datetime = 3;            // 格式化后的时间戳
+//   float high = 4;                 // 最高价
+//   float low = 5;                  // 最低价
+//   float bid = 6;                  // 当前最高买价
+//   float bid_volume = 7;           // 当前最高买价的交易量
+//   float ask = 8;                  // 当前最低卖价
+//   float ask_volume = 9;           // 当前最低卖价的交易量
+//   float vwap = 10;                // 成交量加权平均价
+//   float open = 11;                // 开盘价
+//   float close = 12;               // 最后一笔交易的价格（当前周期的收盘价）
+//   float last = 13;                // 同`close`，为方便起见重复定义
+//   float previous_close = 14;      // 上一周期的收盘价
+//   float change = 15;              // 价格变动量，`last - open`
+//   float percentage = 16;          // 价格变动的百分比，`(change/open) * 100`
+//   float average = 17;             // 平均价格，`(last + open) / 2`
+//   float base_volume = 18;         // 过去24小时中基准货币的交易量
+//   float quote_volume = 19;        // 过去24小时中报价货币的交易量
+// }
+
+// message CancelAllOrdersRequest{
+//   string exchange = 1;
+//   Key key = 2;
+//   string symbol = 3;
+// }
+
+// message CancelOrdersRequest{
+//   string exchange = 1;
+//   Key key = 2;
+//   repeated string id = 3;
+//   string symbol = 4;
+// }
+
+// //限价委托请求参数
+// message LimitOrderRequest {
+//   string exchange = 1;
+//   Key key = 2;
+//   string symbol = 3;  // 交易对名称
+//   double amount = 4;  // 交易数量
+//   string side = 5; // 交易方向，如买入或卖出
+//   double price = 6; //你希望为交易支付的报价货币的数量，仅限于限价单
+// }
+
+// // 市价单请求参数
+// message MarketOrderRequest {
+//   string exchange = 1;
+//   Key key = 2;
+//   string symbol = 3;  // 交易对名称
+//   double amount = 4;  // 交易数量
+//   string side = 5; // 交易方向，如买入或卖出
+//   // string clientOrderId = 4; // 客户端订单ID
+// }
+
+// message OrderRequest {
+//   string exchange = 1;
+//   Key key = 2;
+//   string id = 3;
+//   string symbol = 4;
+// }
+
+// message OrderResponse{
+//   Order order = 1;
+//   string error = 2;
+// }
+
+// message OrdersRequest {
+//   string exchange = 1;
+//   Key key = 2;
+//   string symbol = 3;
+//   int64 since = 4;
+//   int64 limit = 5;
+// }
+
+// message OrdersResponse{
+//   repeated Order orders = 1;
+// }
+
+// // 订单信息
+// message Order {
+//   string id = 1; // 交易ID
+//   string clientOrderId = 2; // 客户端订单ID
+//   string datetime = 3; // 交易时间戳，ISO格式
+//   int64 timestamp = 4; // 交易时间戳，毫秒级Unix时间戳
+//   string symbol = 5; // 交易对名称
+//   string type = 6; // 交易类型，如市价单、限价单等
+//   string status = 7; // 交易状态，如已完成、已取消等
+//   string timeInForce = 8; // 订单生效方式，如立即成交或等待成交
+//   bool postOnly = 9; // 是否为只挂单，只有在被动订单时才生效
+//   string side = 10; // 交易方向，如买入或卖出
+//   double price = 11; // 委托价格
+//   double stopPrice = 12; // 触发价格，仅在触发委托时生效
+//   double triggerPrice = 13; // 触发价格，仅在止盈止损委托时生效
+//   double cost = 14; // 委托总金额
+//   double amount = 15; // 委托数量
+//   double filled = 16; // 成交数量
+//   double remaining = 17; // 剩余未成交数量
+//   repeated Trade trades = 18; // 成交记录列表
+//   Fee fee = 19; // 手续费总额
+//   double average = 20; // 成交均价
+// }
+
+// message BalanceRequest {
+//   string exchange = 1;
+//   Key key = 2;
+//   repeated string currency = 3;
+// }
+
+// message BalanceResponse {
+//   repeated Balance balances = 1;
+// }
+
+// message Balance {
+//   string currency = 1;
+//   double free = 2;
+//   double used = 3;
+//   double total = 4;
+// }
+
+// message TradesRequest {
+//   string exchange = 1;
+//   Key key = 2;
+//   string symbol = 3;
+//   int64 since = 4;
+//   int64 limit = 5;
+// }
+
+// message TradesResponse{
+//   repeated Trade trades = 1;
+// }
+
+// message Trade{
+//   int64 timestamp = 1;  //时间戳
+//   string datetime = 2;  //时间
+//   string symbol = 3;   //交易对
+//   string id = 4;   //交易id
+//   string order = 5;
+//   string type = 6;   //类型
+//   string takerOrMaker = 7;
+//   string side = 8;  //sell或者buy
+//   double price = 9; //价格
+//   double amount = 10; //数量
+//   double cost = 11;  //花费
+//   Fee fee = 12;
+//   //fees
+// }
+
+
+// message Fee {
+//   double cost = 1;
+//   string currency = 2;
+//   double rate = 3;
+// }
+
+// message ExchangesRequest {
+//   int32 types = 1; //1=所有,2=已支持的
+// }
+
+// //交易所返回信息
+// message ExchangesResponse {
+//   repeated string exchanges = 1;
+// }
+

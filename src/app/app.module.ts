@@ -14,6 +14,7 @@ import { ThemeService } from './services/theme.service';
 import { MenuService } from './services/data/menu.service';
 import { AuthService } from './services/data/auth.service';
 import { HttpService } from './services/http/http.service';
+import { SocketService } from './services/socket/socket.service';
 
 registerLocaleData(zh);
 
@@ -35,6 +36,7 @@ registerLocaleData(zh);
     MenuService,
     AuthService,
     HttpService,
+    SocketService,
   ]
 })
 export class AppModule { }

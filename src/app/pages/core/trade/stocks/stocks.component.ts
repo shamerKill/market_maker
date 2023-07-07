@@ -3,6 +3,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { BehaviorSubject } from 'rxjs';
 import { HttpService } from 'src/app/services/http/http.service';
+import { SocketService } from 'src/app/services/socket/socket.service';
 import { toolNumberAdd, toolNumberCut } from 'src/app/tools/number';
 
 @Component({
@@ -95,7 +96,9 @@ export class StocksComponent implements OnInit, AfterViewInit {
     private message: NzMessageService,
     private http: HttpService,
     private modal: NzModalService,
-  ) { }
+    private socket: SocketService,
+  ) {
+  }
 
   ngOnInit(): void {
     try {
@@ -110,6 +113,13 @@ export class StocksComponent implements OnInit, AfterViewInit {
     if (this.symbols.getValue().length === 0) {
       this.onSelectPlatform(true);
     }
+
+    this.socket.getSocketClient().subscribe(res => {
+      console.log(res);
+    });
+    this.socket.getSocketClient().error((err: any) => {
+      console.log(err);
+    });
   }
 
   ngAfterViewInit(): void {
