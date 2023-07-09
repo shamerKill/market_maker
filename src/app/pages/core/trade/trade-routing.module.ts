@@ -4,6 +4,7 @@ import { AlarmsComponent } from './alarms/alarms.component';
 import { RobotListComponent } from './robot-list/robot-list.component';
 import { RobotsComponent } from './robots/robots.component';
 import { StocksComponent } from './stocks/stocks.component';
+import { HighHandicapComponent } from './high-handicap/high-handicap.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'stocks',
     component: StocksComponent,
+  },
+  {
+    path: 'high-handicap/:symbol/:mark',
+    component: HighHandicapComponent,
   },
 ];
 

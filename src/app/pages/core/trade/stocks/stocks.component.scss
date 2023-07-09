@@ -16,6 +16,16 @@ $box-bg: linear-gradient(to bottom, rgba($attach-bg-color, 1),rgba($attach-bg-co
   padding-right: 1rem;
   display: flex;
   flex-direction: column;
+  flex: 1;
+}
+
+.table-item {
+  .sell {
+    color: var(--down-color);
+  }
+  .buy {
+    color: var(--up-color);
+  }
 }
 
 .page-info {
@@ -139,6 +149,11 @@ $box-bg: linear-gradient(to bottom, rgba($attach-bg-color, 1),rgba($attach-bg-co
   }
 }
 
+.page-chart {
+  flex: 1;
+  overflow: hidden;
+}
+
 
 .handicap-area {
   border-radius: 1rem;
@@ -148,6 +163,7 @@ $box-bg: linear-gradient(to bottom, rgba($attach-bg-color, 1),rgba($attach-bg-co
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  min-width: 10rem;
 }
 .handicap-list {
   flex: 1;

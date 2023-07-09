@@ -4,6 +4,7 @@ import { IconComponent } from './icon/icon.component';
 import { KlineChartComponent } from './kline-chart/kline-chart.component';
 import { TradingViewComponent } from './kline-chart/trading-view/trading-view.component';
 import { EmptyComponent } from './empty/empty.component';
+import { EchartsComponent } from './kline-chart/echarts/echarts.component';
 
 
 
@@ -13,6 +14,7 @@ import { EmptyComponent } from './empty/empty.component';
     KlineChartComponent,
     TradingViewComponent,
     EmptyComponent,
+    EchartsComponent,
   ],
   imports: [
     CommonModule,

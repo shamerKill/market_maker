@@ -1,0 +1,17 @@
+<div class="com-echarts">
+  <div [class]="{'echarts-kline': true, 'hidden': chartType !== 0}">
+    <div class="echarts-select">
+      <p
+        [class]="{'echarts-options': true, 'echarts-options-selected': timeType === option.type}"
+        *ngFor="let option of timeTypeArr"
+        (click)="changeTime(option.type)">
+        {{ option.text }}
+      </p>
+    </div>
+    <div class="echarts-kline-box" #echarts></div>
+    <div class="echarts-loading" *ngIf="(kLine|async)?.length === 0">
+      <p class="echarts-loading-text">加载中...</p>
+      <div class="echarts-loading-view"></div>
+    </div>
+  </div>
+</div>

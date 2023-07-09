@@ -23,6 +23,8 @@ import { StocksComponent } from './stocks/stocks.component';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { HighHandicapComponent } from './high-handicap/high-handicap.component';
 
 
 @NgModule({
@@ -31,6 +33,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
     RobotsComponent,
     RobotListComponent,
     StocksComponent,
+    HighHandicapComponent,
   ],
   imports: [
     CommonModule,
@@ -52,6 +55,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
     TradeRoutingModule,
     ComponentsModule,
     NzInputNumberModule,
+    NzTableModule,
   ]
 })
 export class TradeModule { }

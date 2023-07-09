@@ -15,9 +15,28 @@ export class SocketService {
   public getSocketClient(): WebSocketSubject<any> {
     this.token = this.http.token_get();
     if (!this.socketClient) {
-      this.socketClient = webSocket(this.socketUrl + '&token=' + this.token + '&mark=' + this.mark);
+      this.socketClient = webSocket(
+        {
+          url: this.socketUrl + '?token=' + this.token + '&mark=' + this.mark,
+          deserializer: (e) => {
+            try {
+              return JSON.parse(e.data);
+            } catch {
+              return {type: 'text', msg: e.data};
+            }
+          }
+        }
+      );
+      this.setTimePing();
     }
     return this.socketClient;
+  }
+
+  private setTimePing() {
+    this.sendMessage('ping');
+    setTimeout(() => {
+      this.setTimePing();
+    }, 10000);
   }
 
   constructor(
@@ -25,6 +44,7 @@ export class SocketService {
   ) { }
 
   sendMessage(message: any) {
+    this.getSocketClient().next(message);
   }
 
   addListener<T=any>(key: any) {}

@@ -11,6 +11,8 @@ html {
   --down-color: #{$down-color};
   --up-color: #{$up-color};
   --contrast-color: #{$contrast-color};
+  --down-color-opacity1: #{$down-color-opacity1};
+  --up-color-opacity1: #{$up-color-opacity1};
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

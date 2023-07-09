@@ -1,0 +1,92 @@
+<div class="header" nz-row nzJustify="space-between">
+  <p class="header-title">
+    <span nz-icon nzType="fullscreen-exit" nzTheme="outline"></span>
+    高级盘口
+  </p>
+  <button
+    nz-col
+    class="button"
+    nz-button
+    nzType="dashed"
+    (click)="location.back()">
+    <span nz-icon nzType="fullscreen-exit" nzTheme="outline"></span>
+    普通盘口
+  </button>
+</div>
+
+<div class="table" nz-row>
+  <nz-table
+    class="buy-table"
+    nz-col
+    nzSpan="12"
+    #buyTable
+    [nzData]="buyInfoList"
+    [nzShowPagination]="false"
+    [nzFrontPagination]="false">
+    <thead>
+      <tr>
+        <th nzLeft>操作</th>
+        <th>砸盘所需<small>{{sellToken}}</small></th>
+        <th>散户数量</th>
+        <th>我的数量</th>
+        <th>总数量</th>
+        <th>价格</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let buyInfo of buyTable.data">
+        <td nzLeft>
+          <button
+            nz-button
+            nzSize="small"
+            nzType="primary"
+            (click)="handleHighHandicap('sell', buyInfo)">
+            砸盘
+          </button>
+        </td>
+        <td>{{ buyInfo.willDidTokenNumber }}</td>
+        <td>{{ buyInfo.otherUserNumber }}</td>
+        <td>{{ buyInfo.myNumber }}</td>
+        <td>{{ buyInfo.allNumber }}</td>
+        <td>{{ buyInfo.price }}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <nz-table
+    class="sell-table"
+    nz-col
+    nzSpan="12"
+    #sellTable
+    [nzData]="sellInfoList"
+    [nzShowPagination]="false"
+    [nzFrontPagination]="false">
+    <thead>
+      <tr>
+        <th>价格</th>
+        <th>总数量</th>
+        <th>我的数量</th>
+        <th>散户数量</th>
+        <th>拉盘所需<small>{{buyToken}}</small></th>
+        <th nzRight>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let buyInfo of sellTable.data">
+        <td>{{ buyInfo.price }}</td>
+        <td>{{ buyInfo.allNumber }}</td>
+        <td>{{ buyInfo.myNumber }}</td>
+        <td>{{ buyInfo.otherUserNumber }}</td>
+        <td>{{ buyInfo.willDidTokenNumber }}</td>
+        <td nzRight>
+          <button
+            nz-button
+            nzSize="small"
+            nzType="primary"
+            (click)="handleHighHandicap('buy', buyInfo)">
+            拉盘
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>

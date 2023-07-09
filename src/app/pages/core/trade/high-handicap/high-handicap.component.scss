@@ -1,0 +1,45 @@
+.header-title {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  opacity: 0.6;
+}
+.header {
+  padding: 0.5rem 1rem;
+}
+
+.sell-table {
+  overflow: scroll;
+  ::ng-deep {
+    table {
+      background-color: var(--attach-bg-color);
+    }
+    thead {
+      opacity: 0.8;
+      white-space: nowrap;
+    }
+  }
+  thead > tr {
+    opacity: 0.6;
+  }
+  tbody {
+    background-color: var(--down-color-opacity1);
+  }
+}
+.buy-table {
+  overflow: scroll;
+  ::ng-deep {
+    table {
+      background-color: var(--attach-bg-color);
+    }
+    thead {
+      opacity: 0.8;
+      white-space: nowrap;
+    }
+  }
+  tbody {
+    background-color: var(--up-color-opacity1);
+    tr:focus {
+      background-color: var(--primary-color);
+    }
+  }
+}

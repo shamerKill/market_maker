@@ -1,0 +1,67 @@
+
+.com-echarts {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  .echarts-kline {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .echarts-select {
+      display: flex;
+    }
+    .echarts-options {
+      cursor: pointer;
+      user-select: none;
+      margin: 0 1rem;
+      padding: 0 0.5rem;
+      font-size:  0.8rem;
+      line-height: 2rem;
+      &.echarts-options-selected {
+        color: var(--primary-color);
+      }
+    }
+    .echarts-kline-box {
+      flex: 1;
+    }
+  }
+  .hidden {
+    display: none;
+  }
+  .echarts-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: var(--attach-bg-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .echarts-loading-text {
+      font-size: 1.5rem;
+      color: var(--contrast-color);
+      text-align: center;
+    }
+    @keyframes loading {
+      0% {
+        transform: rotateZ(0deg);
+      }
+      100% {
+        transform: rotateZ(360deg * 5);
+      }
+    }
+    .echarts-loading-view {
+      margin-top: 2rem;
+      width: 4rem;
+      height: 4rem;
+      border-radius: 50%;
+      border: 4px solid var(--primary-color);
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      animation: loading 8s infinite;
+    }
+  }
+}

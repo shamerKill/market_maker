@@ -1,9 +1,9 @@
 <div class="container" nz-row>
-  <div class="operation-area" nz-col [nzFlex]="1">
+  <div class="operation-area" nz-col [nzSpan]="18">
     <div class="page-info" nz-row nzAlign="middle">
       <p class="margin-none" nz-col>
         当前盘口：
-        <span class="page-info-value">{{platform?.name}} {{(symbols|async)?.join('/')}}</span>
+        <span class="page-info-value">{{(platform|async)?.name}} {{(symbols|async)?.join('/')}}</span>
       </p>
       <button nz-button nzType="text" nz-col [nzSpan]="4" [nzOffset]="1" (click)="onSwitchCollected()">
         <span nz-icon nzType="star" [ngClass]="isCollected ? 'color-primary' : 'opacity-5'"
@@ -92,8 +92,8 @@
           </div>
         </div>
       </div>
-      <div class="page-chart" nz-col [nzFlex]="1">
-        <lib-kline-chart></lib-kline-chart>
+      <div class="page-chart" nz-col>
+        <lib-kline-chart [symbol]="(symbols|async)?.join('_')" [exchange]="(platform|async)?.mark"></lib-kline-chart>
       </div>
     </div>
     <div class="page-table">
@@ -102,11 +102,11 @@
           [attr.data-total]="'(' + orderList.total + ')'" (click)="tabType = 0">
           订单管理
         </button>
-        <button [ngClass]="{'table-tab-active':  tabType === 1}" class="table-tab" (click)="tabType = 1">
+        <!-- <button [ngClass]="{'table-tab-active':  tabType === 1}" class="table-tab" (click)="tabType = 1">
           机器人管理
-        </button>
+        </button> -->
         <div class="table-space"></div>
-        <a class="table-logs"><i class="iconfont icon-jilu"></i>交易记录</a>
+        <!-- <a class="table-logs"><i class="iconfont icon-jilu"></i>交易记录</a> -->
       </div>
       <div class="table-list">
         <ng-container *ngIf="tabType === 0">
@@ -117,6 +117,24 @@
             <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">方向</p>
             <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">时间</p>
             <p nz-col [nzSpan]="4" class="text-right margin-bottom-0 padding-right-10 opacity-8">撤单</p>
+          </div>
+          <div class="table-item padding-top-5 padding-bottom-5" nz-row *ngFor="let item of orderList.list">
+            <p nz-col [nzSpan]="4" class="margin-bottom-0 padding-left-10 opacity-8">{{item.price}}</p>
+            <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">{{item.number}}</p>
+            <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">{{item.successOrder}}</p>
+            <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8" [ngClass]="item.directive">
+              {{item.directive === 'sell' ? '卖出' : '买入'}}
+            </p>
+            <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">{{item.time | date:'MM/dd HH:mm:ss'}}</p>
+            <div nz-col [nzSpan]="4" class="text-right margin-bottom-0 padding-right-10 opacity-8">
+              <button
+                nz-button
+                nzSize="small"
+                nzType="dashed"
+                (click)="onCancelOrder(item.id)">
+                撤单
+              </button>
+            </div>
           </div>
           <lib-empty *ngIf="orderList.total === 0"></lib-empty>
         </ng-container>
@@ -129,7 +147,7 @@
   <div class="handicap-area" nz-col [nzSpan]="6">
     <div class="handicap-top" nz-row>
       <button nz-col [nzSpan]="12" nz-button nzSize="large" nzType="text" class="handicap-btn"
-        [ngClass]="isSimpleBookList ? '' : 'opacity-5'" (click)="onSwitchSimpleBookList()">
+        [ngClass]="isSimpleBookList ? '' : 'opacity-5'">
         <span nz-icon nzType="fullscreen-exit" nzTheme="outline"></span>
         <span>普通盘口</span>
       </button>
@@ -147,14 +165,14 @@
       <ul class="handicap-sell padding-none margin-none">
         <li nz-row class="handicap-item" *ngFor="let item of sellOrderBookList">
           <span class="handicap-price" nz-col [nzFlex]="1">{{item.price}}</span>
-          <span class="handicap-number" nz-col>{{item.number}}</span>
+          <span class="handicap-number" nz-col>{{item.amount}}</span>
         </li>
       </ul>
       <div class="handicap-divider"></div>
       <ul class="handicap-buy padding-none margin-none">
-        <li nz-row class="handicap-item" *ngFor="let item of sellOrderBookList">
+        <li nz-row class="handicap-item" *ngFor="let item of buyOrderBookList">
           <span class="handicap-price" nz-col [nzFlex]="1">{{item.price}}</span>
-          <span class="handicap-number" nz-col>{{item.number}}</span>
+          <span class="handicap-number" nz-col>{{item.amount}}</span>
         </li>
       </ul>
     </div>

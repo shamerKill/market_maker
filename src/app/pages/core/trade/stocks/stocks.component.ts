@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, filter } from 'rxjs';
 import { HttpService } from 'src/app/services/http/http.service';
 import { SocketService } from 'src/app/services/socket/socket.service';
 import { toolNumberAdd, toolNumberCut } from 'src/app/tools/number';
@@ -24,7 +25,7 @@ export class StocksComponent implements OnInit, AfterViewInit {
 
   exchangeList: {name: string, mark: string, logo: string}[] = [];
   // 平台
-  platform?: {name: string, mark: string, logo?: string};
+  platform = new BehaviorSubject<{name: string, mark: string, logo?: string}>({name: '', mark: ''});
   // 币种
   symbols: BehaviorSubject<string[]> = new BehaviorSubject([] as string[]);
   // 是否被收藏
@@ -55,11 +56,9 @@ export class StocksComponent implements OnInit, AfterViewInit {
 
   // 当前盘口
   isSimpleBookList: boolean = true;
-  sellOrderBookList: {[key in 'price'|'number']: string}[] = [
-    { price: '0', number: '0' },
+  sellOrderBookList: {[key in 'price'|'amount']: number}[] = [
   ]
-  buyOrderBookList: {[key in 'price'|'number']: string}[] = [
-    { price: '0', number: '0' },
+  buyOrderBookList: {[key in 'price'|'amount']: number}[] = [
   ]
 
   // 订单列表
@@ -72,6 +71,7 @@ export class StocksComponent implements OnInit, AfterViewInit {
       time: Date,
       successOrder: string,
       cancelOrder: string,
+      id: string,
     }[],
   } = {
     total: 0,
@@ -97,14 +97,15 @@ export class StocksComponent implements OnInit, AfterViewInit {
     private http: HttpService,
     private modal: NzModalService,
     private socket: SocketService,
+    private router: Router,
   ) {
   }
 
   ngOnInit(): void {
     try {
-      this.platform = JSON.parse(window.localStorage.getItem('maker_platform')||'');
+      this.platform.next(JSON.parse(window.localStorage.getItem('maker_platform')||'{"name":"","mark":""}'));
       this.symbols.next(JSON.parse(window.localStorage.getItem('maker_symbols')||''));
-      this.selectModalValue.platformValue = this.platform?.mark || '';
+      this.selectModalValue.platformValue = this.platform.getValue().mark;
       this.selectModalValue.symbolOneValue = this.symbols.getValue()[0] || '';
       this.selectModalValue.symbolTwoValue = this.symbols.getValue()[1] || '';
       this._onWatchPair();
@@ -112,29 +113,62 @@ export class StocksComponent implements OnInit, AfterViewInit {
     // 如果没有盘口，选择盘口
     if (this.symbols.getValue().length === 0) {
       this.onSelectPlatform(true);
+    } else {
     }
 
-    this.socket.getSocketClient().subscribe(res => {
-      console.log(res);
-    });
-    this.socket.getSocketClient().error((err: any) => {
-      console.log(err);
-    });
+    this.watchDepth();
+    this.watchOrder();
   }
 
   ngAfterViewInit(): void {
   }
 
+  // 读取深度
+  watchDepth() {
+    this.socket.getSocketClient().pipe(filter(item => {
+      return item.type === 'depth';
+    })).subscribe(res => {
+      if (res.data) {
+        this.sellOrderBookList = res.data.Asks;
+        this.buyOrderBookList = res.data.Bids;
+      }
+    });
+  }
+  // 监听订单
+  watchOrder() {
+    this.socket.getSocketClient().pipe(filter(res => {
+      return (res.type === 'orders' || res.type === 'order');
+    })).subscribe(res => {
+      if (Array.isArray(res.data)) {
+        this.orderList.total = res.data.length;
+        this.orderList.list = res.data.map((item: any) => {
+          return {
+            price: item.price.toString(),
+            number: item.amount.toString(),
+            directive: item.side,
+            time: new Date(item.date),
+            successOrder: item.filled.toString(),
+            cancelOrder: toolNumberCut(item.amount.toString(), item.filled.toString()),
+            id: item.order_id,
+          };
+        });
+      } else {
+      }
+    });
+  }
+
+
 
   onSwitchCollected() {
     this.isCollected = !this.isCollected;
-    if (!this.platform) return;
+    const {name, mark} = this.platform.getValue();
+    if (!this.platform.getValue().mark) return;
     if (this.isCollected) {
-      this.collectionList.push({name: this.platform?.name, mark: this.platform?.mark, symbols: this.symbols.getValue()});
+      this.collectionList.push({name: name, mark: mark, symbols: this.symbols.getValue()});
       window.localStorage.setItem('maker_collection', JSON.stringify(this.collectionList));
       this.message.success('收藏成功');
     } else {
-      this.collectionList = this.collectionList.filter(item => item.mark !== this.platform?.mark);
+      this.collectionList = this.collectionList.filter(item => item.mark !== mark);
       window.localStorage.setItem('maker_collection', JSON.stringify(this.collectionList));
       this.message.success('取消收藏成功');
     }
@@ -157,7 +191,12 @@ export class StocksComponent implements OnInit, AfterViewInit {
   }
 
   onSwitchSimpleBookList() {
-    this.isSimpleBookList = !this.isSimpleBookList;
+    // this.isSimpleBookList = !this.isSimpleBookList;
+    this.router.navigate([
+      '/core/trade/high-handicap',
+      this.symbols.getValue().join('_'),
+      this.platform.getValue().mark
+    ]);
   }
 
   onManualOrderPriceChange(type: 'add'|'cut') {
@@ -190,18 +229,43 @@ export class StocksComponent implements OnInit, AfterViewInit {
       this.message.warning('请检查列表是否选择完整');
       return;
     }
-    this.platform = this.exchangeList.find(item => item.mark === this.selectModalValue.platformValue);
+    const item = this.exchangeList.find(item => item.mark === this.selectModalValue.platformValue);
+    if (item) this.platform.next(item);
     this.symbols.next([this.selectModalValue.symbolOneValue, this.selectModalValue.symbolTwoValue]);
     this.onSelectPlatform(false);
     this._onWatchPair();
   }
 
+  // 撤单
+  onCancelOrder(id: string) {
+    const confirm = this.modal.confirm({
+      nzTitle: '撤单',
+      nzContent: '是否撤销该订单',
+      nzOnOk: () => {
+        confirm.updateConfig({nzOkLoading: true});
+        this.http.post('/handle/kill', {
+          order_id: id,
+          pairs: this.symbols.getValue().join('_'),
+          mark: this.platform.getValue().mark,
+        }, {withToken: true}).subscribe(res => {
+          confirm.destroy();
+          if (res.errno !== 200) {
+            this.message.error(res.errmsg);
+            return;
+          }
+          this.message.success('已执行，执行结果请去日志中查看');
+        });
+        return false;
+      }
+    });
+  }
+
   // 检测币种更改
   private _onWatchPair() {
-    window.localStorage.setItem('maker_platform', JSON.stringify(this.platform));
+    window.localStorage.setItem('maker_platform', JSON.stringify(this.platform.getValue()));
     window.localStorage.setItem('maker_symbols', JSON.stringify(this.symbols.getValue()));
     if (this.collectionList.find(item =>
-      item.mark === this.platform?.mark
+      item.mark === this.platform.getValue().mark
       && item.symbols.includes(this.selectModalValue.symbolOneValue)
       && item.symbols.includes(this.selectModalValue.symbolTwoValue)
     )) {
@@ -214,7 +278,7 @@ export class StocksComponent implements OnInit, AfterViewInit {
 
   // 获取余额
   private _getWalletBalance() {
-    this.http.get('/handle/balance', {pairs: this.symbols.getValue().join('_'), mark: this.platform?.mark||''}, {withToken: true})
+    this.http.get('/handle/balance', {pairs: this.symbols.getValue().join('_'), mark: this.platform.getValue().mark||''}, {withToken: true})
       .subscribe(res => {
         if (res.errno !== 200) {
           this.message.error(res.errmsg);
@@ -247,7 +311,7 @@ export class StocksComponent implements OnInit, AfterViewInit {
       nzOnOk: () => {
         confirm.updateConfig({nzOkLoading: true});
         this.http.post('/handle/order', {
-          mark: this.platform?.mark,
+          mark: this.platform.getValue().mark,
           pairs: this.symbols.getValue().join('_'),
           side: type,
           price,
@@ -257,7 +321,7 @@ export class StocksComponent implements OnInit, AfterViewInit {
             this.message.error(res.errmsg);
             return;
           }
-          this.message.success('下单成功');
+          this.message.success('已执行，执行结果请去日志中查看');
           this._getWalletBalance();
           confirm.destroy();
         });
@@ -293,7 +357,7 @@ export class StocksComponent implements OnInit, AfterViewInit {
         confirm.updateConfig({nzOkLoading: true});
         this.http.post('/handle/batch', {
           pairs: this.symbols.getValue().join('_'),
-          mark: this.platform?.mark,
+          mark: this.platform.getValue().mark,
           side: this.toolType,
           min_price: this.toolFormValue.priceMin,
           max_price: this.toolFormValue.priceMax,
@@ -308,7 +372,7 @@ export class StocksComponent implements OnInit, AfterViewInit {
             this.message.error(res.errmsg);
             return;
           }
-          this.message.success('下单成功');
+          this.message.success('已执行，执行结果请去日志中查看');
           this.toolFormValue.allOrder = '';
           this.toolFormValue.decimal = '';
           this.toolFormValue.priceMin = '';
@@ -341,7 +405,7 @@ export class StocksComponent implements OnInit, AfterViewInit {
         confirm.updateConfig({nzOkLoading: true});
         this.http.post('/handle/batch_kill', {
           pairs: this.symbols.getValue().join('_'),
-          mark: this.platform?.mark,
+          mark: this.platform.getValue().mark,
           min_price: this.toolFormValue.priceMin,
           max_price: this.toolFormValue.priceMax,
           min_num: this.toolFormValue.numberMin,
@@ -353,7 +417,7 @@ export class StocksComponent implements OnInit, AfterViewInit {
             this.message.error(res.errmsg);
             return;
           }
-          this.message.success('撤单成功');
+          this.message.success('已执行，执行结果请去日志中查看');
           this.toolFormValue.allOrder = '';
           this.toolFormValue.decimal = '';
           this.toolFormValue.priceMin = '';
