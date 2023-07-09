@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { HttpService } from '../http/http.service';
+import { environment } from 'src/environments/environments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocketService {
-  private socketUrl = 'ws://192.168.3.174:8553/order/list';
+  private socketUrl = 'ws://' + environment.httpHost + '/order/list';
   private token: string | null = null;
   private mark: string | null = 'mexc';
 
