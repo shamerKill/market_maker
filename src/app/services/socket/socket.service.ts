@@ -47,5 +47,4 @@ export class SocketService {
     this.getSocketClient().next(message);
   }
 
-  addListener<T=any>(key: any) {}
 }
