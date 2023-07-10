@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="info">{{item.currency}}</div>
-      <div class="info">{{item.content}}</div>
+      <div class="info" [innerHTML]="replaceContent(item.content)"></div>
     </div>
   </div>
   <div class="robots-log-pages">

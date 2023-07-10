@@ -72,4 +72,7 @@ export class RobotLogsComponent {
     this.pageIndex = result;
     this.getList();
   }
+  replaceContent(input: string) {
+    return input.replace(/\n/g, '<br/>');
+  }
 }
