@@ -1,1 +1,5 @@
-<lib-echarts-view [symbol]="symbol" [exchange]="exchange"></lib-echarts-view>
+<lib-echarts-view
+  [symbol]="symbol"
+  [exchange]="exchange"
+  [timeType]="timeType"
+  (timeTypeChange)="changeTimeType($event)"></lib-echarts-view>

@@ -30,6 +30,10 @@ export class StocksComponent implements OnInit, AfterViewInit {
   symbols: BehaviorSubject<string[]> = new BehaviorSubject([] as string[]);
   // 是否被收藏
   isCollected: boolean = false;
+  // 当前价格
+  tokenNowPrice: string = '';
+  // 方向
+  tokenDirection: 'up'|'down' = 'up';
 
   // 手动下单
   manualOrder: {[key in 'price'|'number'|'priceStep'|'numberStep']: string} = {
@@ -118,6 +122,18 @@ export class StocksComponent implements OnInit, AfterViewInit {
 
     this.watchDepth();
     this.watchOrder();
+
+
+    this.platform.subscribe(res => {
+      this.socket.setMark(res.mark);
+    });
+    this.socket.getSocketClient().pipe(
+      filter(item => item.type === 'web-price')
+    ).subscribe(res => {
+      const data = res.data;
+      this.tokenDirection = data.direction;
+      this.tokenNowPrice = data.close;
+    });
   }
 
   ngAfterViewInit(): void {

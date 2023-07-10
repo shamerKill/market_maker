@@ -32,10 +32,10 @@ export function calculateMA(
     } else {
       let sum = 0;
       for (let j = 0; j < dayCount; j++) {
-        sum += parseFloat(inData[i - j][type] || '');
+        sum += parseFloat(inData[i - j][type] || '0');
       }
-      let fixedLength = 4;
-      if (sum / dayCount < 0) fixedLength = 6;
+      let fixedLength = 10;
+      if (sum / dayCount < 0) fixedLength = 12;
       result.push(parseFloat((sum / dayCount).toFixed(fixedLength)));
     }
   }
@@ -119,9 +119,9 @@ const calcMACD = (short: any, long: any, mid: any, data: any, field: any) => {
   for (i = 0, l = data.length; i < l; i++) {
     macd.push((dif[i] - dea[i]) * 2);
   }
-  result.dif = dif.map((item) => item.toFixed(4));
-  result.dea = dea.map((item) => item.toFixed(4));
-  result.macd = macd.map((item) => item.toFixed(4));
+  result.dif = dif.map((item) => item.toFixed(10));
+  result.dea = dea.map((item) => item.toFixed(10));
+  result.macd = macd.map((item) => item.toFixed(10));
   return result;
 };
 

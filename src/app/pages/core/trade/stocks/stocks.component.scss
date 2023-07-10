@@ -324,3 +324,16 @@ $box-bg: linear-gradient(to bottom, rgba($attach-bg-color, 1),rgba($attach-bg-co
     border-radius: 0.5rem;
   }
 }
+
+
+.token-info-price {
+  padding-left: 1rem;
+  .token-info-price- {
+    &down {
+      color: var(--down-color);
+    }
+    &up {
+      color: var(--up-color);
+    }
+  }
+}
