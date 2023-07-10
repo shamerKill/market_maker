@@ -81,15 +81,17 @@ export class HttpService {
     });
   }
 
-  private check_login(res: Observable<resType>): Observable<resType> {
+  private check_login = (res: Observable<resType>): Observable<resType> => {
     const sub = new Subject<resType>();
     res.subscribe(data => {
-      sub.next(data);
       if (data.errno === 20001) {
         window.localStorage.removeItem('market_token');
         this.router.navigate(['/auth/login']);
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 100);
       }
+      sub.next(data);
     });
     return sub;
   }

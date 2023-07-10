@@ -46,21 +46,29 @@ export class SocketService {
   }
 
   public setMark(mark: string) {
-    if (this.mark === mark) return;
     this.mark = mark;
     this.setSocketClient(mark);
+  }
+  public stopClient() {
+    this.markSocketClient?.unsubscribe();
+    this.markSocketClient = null;
   }
 
   private setTimePing() {
     this.sendMessage('ping');
-    setTimeout(() => {
-      this.setTimePing();
-    }, 10000);
   }
 
   constructor(
     private http: HttpService,
-  ) { }
+  ) {
+    this.socketClient.subscribe(res => {
+      if (res === 'pong') {
+        setTimeout(() => {
+          this.setTimePing();
+        }, 10000);
+      }
+    });
+  }
 
   sendMessage(message: any) {
     this.markSocketClient?.next(message);
