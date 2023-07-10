@@ -7,7 +7,7 @@
     </nz-breadcrumb>
     <label nz-checkbox [(ngModel)]="checked" (ngModelChange)="updateAllChecked()">仅显示运行中</label>
   </div>
-  <div *ngIf="robotList">
+  <div *ngIf="robotList.length>0">
     <div class="robots-work-content-add">
       <button nz-button nzType="primary" [routerLink]="['/core/trade/robot-list']">添加机器人</button>
     </div>
@@ -36,7 +36,7 @@
       </div>
     </div>
   </div>
-  <div class="robots-work-add" *ngIf="!robotList">
+  <div class="robots-work-add" *ngIf="robotList.length==0">
     <img src="/assets/loginImg/jiqiren.png" alt="">
     <div class="text">当前暂无运行中机器人，去开启</div>
     <button nz-button nzType="primary" [routerLink]="['/core/trade/robot-list']">添加机器人</button>

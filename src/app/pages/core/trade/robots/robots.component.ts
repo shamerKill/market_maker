@@ -16,7 +16,7 @@ export class RobotsComponent {
   ) {
     this.getInfo();
   }
-  robotList:any;
+  robotList:{ name: string; coin: any[]; }[]=[];
   isLoading:boolean=false;
   modalInfo1 = {
     buy_num: '', // 买盘每档数量(跟盘、画线、盘口必填参数)
@@ -167,7 +167,7 @@ export class RobotsComponent {
         return;
       }
       let resList = [];
-      if (res.data) {
+      if (res.data.length>0) {
         for (let key in res.data) {
           let itemObj:{name:string,coin:any[]} = {
             name: '',
@@ -185,8 +185,8 @@ export class RobotsComponent {
           }
           resList.push(itemObj)
         }
-        this.robotList = resList;
       }
+      this.robotList = resList;
     });
     this.http.get('/exchange',{},{withToken:false}).subscribe(res => {
       if (res.errno !== 200) {
@@ -207,7 +207,7 @@ export class RobotsComponent {
         return;
       }
       let resList = [];
-      if (res.data) {
+      if (res.data.length>0) {
         for (let key in res.data) {
           let itemObj:{name:string,coin:any[]} = {
             name: '',
@@ -234,8 +234,8 @@ export class RobotsComponent {
           }
           resList.push(itemObj)
         }
-        this.robotList = resList;
       }
+      this.robotList = resList;
     });
   }
   changeState(state:boolean,mark:number) {
