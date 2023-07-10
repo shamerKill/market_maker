@@ -123,22 +123,24 @@
             <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">时间</p>
             <p nz-col [nzSpan]="4" class="text-right margin-bottom-0 padding-right-10 opacity-8">撤单</p>
           </div>
-          <div class="table-item padding-top-5 padding-bottom-5" nz-row *ngFor="let item of orderList.list">
-            <p nz-col [nzSpan]="4" class="margin-bottom-0 padding-left-10 opacity-8">{{item.price}}</p>
-            <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">{{item.number}}</p>
-            <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">{{item.successOrder}}</p>
-            <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8" [ngClass]="item.directive">
-              {{item.directive === 'sell' ? '卖出' : '买入'}}
-            </p>
-            <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">{{item.time | date:'MM/dd HH:mm:ss'}}</p>
-            <div nz-col [nzSpan]="4" class="text-right margin-bottom-0 padding-right-10 opacity-8">
-              <button
-                nz-button
-                nzSize="small"
-                nzType="dashed"
-                (click)="onCancelOrder(item.id)">
-                撤单
-              </button>
+          <div class="table-body">
+            <div class="table-item padding-top-5 padding-bottom-5" nz-row *ngFor="let item of orderList.list">
+              <p nz-col [nzSpan]="4" class="margin-bottom-0 padding-left-10 opacity-8">{{item.price}}</p>
+              <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">{{item.number}}</p>
+              <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">{{item.successOrder}}</p>
+              <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8" [ngClass]="item.directive">
+                {{item.directive === 'sell' ? '卖出' : '买入'}}
+              </p>
+              <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">{{item.time | date:'MM/dd HH:mm:ss'}}</p>
+              <div nz-col [nzSpan]="4" class="text-right margin-bottom-0 padding-right-10 opacity-8">
+                <button
+                  nz-button
+                  nzSize="small"
+                  nzType="dashed"
+                  (click)="onCancelOrder(item.id)">
+                  撤单
+                </button>
+              </div>
             </div>
           </div>
           <lib-empty *ngIf="orderList.total === 0"></lib-empty>

@@ -17,6 +17,7 @@ $box-bg: linear-gradient(to bottom, rgba($attach-bg-color, 1),rgba($attach-bg-co
   display: flex;
   flex-direction: column;
   flex: 1;
+  height: 100%;
 }
 
 .table-item {
@@ -89,6 +90,7 @@ $box-bg: linear-gradient(to bottom, rgba($attach-bg-color, 1),rgba($attach-bg-co
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .table-tabs {
@@ -129,6 +131,13 @@ $box-bg: linear-gradient(to bottom, rgba($attach-bg-color, 1),rgba($attach-bg-co
 }
 .table-list {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  .table-body {
+    flex: 1;
+    overflow: auto;
+  }
 }
 .table-head {
   background-color: var(--attach-bg-color);
