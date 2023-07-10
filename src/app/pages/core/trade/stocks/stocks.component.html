@@ -1,9 +1,14 @@
 <div class="container" nz-row>
-  <div class="operation-area" nz-col [nzSpan]="18">
+  <div class="operation-area" nz-col>
     <div class="page-info" nz-row nzAlign="middle">
       <p class="margin-none" nz-col>
         当前盘口：
         <span class="page-info-value">{{(platform|async)?.name}} {{(symbols|async)?.join('/')}}</span>
+      </p>
+      <p class="margin-none token-info-price" nz-col>
+        现价:
+        <span [ngClass]="'token-info-price-' + tokenDirection">{{tokenNowPrice}}</span>
+        <small>{{(symbols|async)?.join('/')}}</small>
       </p>
       <button nz-button nzType="text" nz-col [nzSpan]="4" [nzOffset]="1" (click)="onSwitchCollected()">
         <span nz-icon nzType="star" [ngClass]="isCollected ? 'color-primary' : 'opacity-5'"

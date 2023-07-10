@@ -1,6 +1,6 @@
 import { HttpService } from './../../../services/http/http.service';
 import { kLineOptions, getOptionSerise, getOptionTitle, TypeKlineValue } from './echarts.options';
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Input, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Input, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { init as EchartInit, ECharts, EChartOption } from 'echarts';
 import formatTime from '../../../tools/time';
 import { SocketService } from 'src/app/services/socket/socket.service';
@@ -15,8 +15,9 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 export class EchartsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   @Input('symbol') symbol?: string;
   @Input('exchange') exchange?: string;
+  @Input('timeType') timeType: '1m'|'5m'|'15m'|'1h'|'4h'|'1d' = '1m';
+  @Output() timeTypeChange = new EventEmitter<string>();
   // 显示时间段
-  timeType: '1m'|'5m'|'15m'|'1h'|'4h'|'1d' = '1m';
   // 页面显示时间段
   timeTypeArr: {text: string; type: EchartsComponent['timeType'] }[] = [
     { text: '1分', type: '1m' },
@@ -159,6 +160,13 @@ export class EchartsComponent implements OnInit, AfterViewInit, OnDestroy, OnCha
         kTime: this.timeType,
       }));
       this.kLine.next(kLineArr);
+      this.socket.getSocketClient().next({
+        type: 'web-price',
+        data: {
+          direction: data[data.length - 1].close - data[data.length - 2].close > 0 ? 'up' : 'down',
+          close: data[data.length - 1].close,
+        }
+      });
     } else {
       if (this.kLine.getValue().length === 0) return;
       const oldData = [...this.kLine.getValue()];
@@ -177,6 +185,13 @@ export class EchartsComponent implements OnInit, AfterViewInit, OnDestroy, OnCha
       };
       oldData.push(obj);
       this.kLine.next(oldData);
+      this.socket.getSocketClient().next({
+        type: 'web-price',
+        data: {
+          direction: parseFloat(oldData[data.length - 1].closePrice) - parseFloat(oldData[data.length - 2].closePrice) > 0 ? 'up' : 'down',
+          close: data.close,
+        }
+      });
     }
   }
 
@@ -185,6 +200,7 @@ export class EchartsComponent implements OnInit, AfterViewInit, OnDestroy, OnCha
     if (this.timeType === type) return;
     this.timeType = type;
     this.resetKline();
+    this.timeTypeChange.emit(type);
   }
 
 }

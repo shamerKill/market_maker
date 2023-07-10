@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -12,7 +12,7 @@ import { toolNumberAdd, toolNumberCut } from 'src/app/tools/number';
   templateUrl: './stocks.component.html',
   styleUrls: ['./stocks.component.scss']
 })
-export class StocksComponent implements OnInit, AfterViewInit {
+export class StocksComponent implements OnInit, AfterViewInit, OnDestroy {
   selectModalValue = {
     isVisible: false,
     collectionValue: '',
@@ -30,6 +30,10 @@ export class StocksComponent implements OnInit, AfterViewInit {
   symbols: BehaviorSubject<string[]> = new BehaviorSubject([] as string[]);
   // 是否被收藏
   isCollected: boolean = false;
+  // 当前价格
+  tokenNowPrice: string = '';
+  // 方向
+  tokenDirection: 'up'|'down' = 'up';
 
   // 手动下单
   manualOrder: {[key in 'price'|'number'|'priceStep'|'numberStep']: string} = {
@@ -118,9 +122,25 @@ export class StocksComponent implements OnInit, AfterViewInit {
 
     this.watchDepth();
     this.watchOrder();
+
+
+    this.platform.subscribe(res => {
+      this.socket.setMark(res.mark);
+    });
+    this.socket.getSocketClient().pipe(
+      filter(item => item.type === 'web-price')
+    ).subscribe(res => {
+      const data = res.data;
+      this.tokenDirection = data.direction;
+      this.tokenNowPrice = data.close;
+    });
   }
 
   ngAfterViewInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.socket.stopClient();
   }
 
   // 读取深度
