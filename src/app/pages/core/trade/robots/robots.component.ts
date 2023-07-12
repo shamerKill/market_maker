@@ -167,7 +167,7 @@ export class RobotsComponent {
         return;
       }
       let resList = [];
-      if (res.data.length>0) {
+      if (res.data) {
         for (let key in res.data) {
           let itemObj:{name:string,coin:any[]} = {
             name: '',
