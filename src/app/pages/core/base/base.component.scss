@@ -10,6 +10,9 @@
 .base-sider {
   @include borderAfter('right');
 }
+.base-logo {
+  height: 2rem;
+}
 .base-menu-controller {
   font-size: 1.4rem;
   cursor: pointer;

@@ -114,7 +114,7 @@
         <!-- <a class="table-logs"><i class="iconfont icon-jilu"></i>交易记录</a> -->
       </div>
       <div class="table-list">
-        <ng-container *ngIf="tabType === 0">
+        <ng-container *ngIf="tabType === 0 && orderList.total !== 0">
           <div class="table-head padding-top-5 padding-bottom-5" nz-row>
             <p nz-col [nzSpan]="4" class="margin-bottom-0 padding-left-10 opacity-8">价格</p>
             <p nz-col [nzSpan]="4" class="text-center margin-bottom-0 opacity-8">数量</p>
