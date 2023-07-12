@@ -36,16 +36,16 @@ export class MenuService {
           icon: 'icon-a-5',
           href: '/core/logs/robot-logs',
         },
-        {
-          title: '数据报表',
-          icon: 'icon-a-6',
-          href: '/core/logs/chart',
-        },
-        {
-          title: '资产报表',
-          icon: 'icon-a-7',
-          href: '/core/logs/property',
-        },
+        // {
+        //   title: '数据报表',
+        //   icon: 'icon-a-6',
+        //   href: '/core/logs/chart',
+        // },
+        // {
+        //   title: '资产报表',
+        //   icon: 'icon-a-7',
+        //   href: '/core/logs/property',
+        // },
         {
           title: '报警系统',
           icon: 'icon-a-8',
@@ -56,16 +56,16 @@ export class MenuService {
     {
       name: '用户设置',
       list: [
-        {
-          title: '用户中心',
-          icon: 'icon-a-9',
-          href: '/core/user/settings',
-        },
-        {
-          title: '邀请好友',
-          icon: 'icon-a-10',
-          href: '/core/user/recharge',
-        }
+        // {
+        //   title: '用户中心',
+        //   icon: 'icon-a-9',
+        //   href: '/core/user/settings',
+        // },
+        // {
+        //   title: '邀请好友',
+        //   icon: 'icon-a-10',
+        //   href: '/core/user/recharge',
+        // }
       ]
     },
     // {
