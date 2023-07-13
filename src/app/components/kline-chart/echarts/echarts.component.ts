@@ -188,7 +188,7 @@ export class EchartsComponent implements OnInit, AfterViewInit, OnDestroy, OnCha
       this.socket.getSocketClient().next({
         type: 'web-price',
         data: {
-          direction: parseFloat(oldData[data.length - 1].closePrice) - parseFloat(oldData[data.length - 2].closePrice) > 0 ? 'up' : 'down',
+          direction: parseFloat(oldData[oldData.length - 1].closePrice) - parseFloat(oldData[oldData.length - 2].closePrice) > 0 ? 'up' : 'down',
           close: data.close,
         }
       });

@@ -48,12 +48,13 @@ export class HighHandicapComponent implements OnInit {
       this.symbol = res['symbol'];
       this.sellToken = this.symbol?.split('_')[0] || '';
       this.buyToken = this.symbol?.split('_')[1] || '';
+      this.socket.setMark(this.mark || '');
     });
     this.socket.getSocketClient().pipe(filter(item => {
       return item.type === 'seniorHandle';
     })).subscribe(res => {
       if (res.data) {
-        this.buyInfoList = res.data.Bids.map((item: any) => {
+        if (res.data.Bids) this.buyInfoList = res.data.Bids.map((item: any) => {
           return {
             id: item.price,
             willDidTokenType: this.buyToken,
@@ -64,7 +65,7 @@ export class HighHandicapComponent implements OnInit {
             price: item.price,
           };
         });
-        this.sellInfoList = res.data.Asks.map((item: any) => {
+        if (res.data.Asks) this.sellInfoList = res.data.Asks.map((item: any) => {
           return {
             id: item.price,
             willDidTokenType: this.buyToken,
